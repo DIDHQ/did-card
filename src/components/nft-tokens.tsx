@@ -13,7 +13,7 @@ export default forwardRef<
   const { data: tokens } = useTokens(props.addresses, props.collection.id)
 
   return (
-    <div ref={ref} className={clsx('flex flex-wrap gap-4', props.className)}>
+    <div ref={ref} className={clsx('flex flex-wrap gap-6', props.className)}>
       {tokens
         ? tokens.map((token) => (
             <img

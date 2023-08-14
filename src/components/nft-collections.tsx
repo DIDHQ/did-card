@@ -12,8 +12,8 @@ export default function NftCollections(props: {
     <GroupedVirtuoso
       groupCounts={collections.map(() => 1)}
       groupContent={(index) => (
-        <div className="flex h-12 items-center justify-between bg-gray-50 px-6">
-          <span className="text-gray-800">{collections[index]!.name}</span>
+        <div className="flex h-16 items-center justify-between bg-slate-900 px-6 font-semibold">
+          <span className="text-gray-200">{collections[index]!.name}</span>
           <span className="text-gray-500">
             {collections[index]!.tokenCount}
           </span>
@@ -23,7 +23,7 @@ export default function NftCollections(props: {
         <NftTokens
           addresses={props.addresses}
           collection={collections[index]!}
-          className="px-6 py-4"
+          className="p-6"
         />
       )}
       className={props.className}
