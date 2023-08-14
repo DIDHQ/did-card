@@ -43,7 +43,7 @@ export default function CardPreview(props: {
                 I AM
               </div>
               <div className="mb-[12pt] text-[32pt] font-bold text-white">
-                {props.did}
+                {props.did || '???'}
               </div>
             </div>
             <NfcIcon className="mb-[10pt] ml-[-10pt] mr-[10pt] h-[20pt] w-[20pt] shrink-0 text-white" />
