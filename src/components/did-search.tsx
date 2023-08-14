@@ -15,7 +15,7 @@ export default function DIDSearch(props: {
     <div className={clsx('flex h-full flex-col', props.className)}>
       <input
         autoFocus
-        placeholder="Your DID"
+        placeholder="My DID"
         value={did}
         onChange={(e) => setDid(e.target.value)}
         onBlur={() => props.setDid(did)}
