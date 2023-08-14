@@ -1,6 +1,6 @@
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 import clsx from 'clsx'
-import { useCollections } from '@/hooks/use-nfts'
+import NftCollections from './nft-collections'
 import useRelatedAddresses from '@/hooks/use-related-addresses'
 
 export default function DIDSearch(props: {
@@ -8,39 +8,18 @@ export default function DIDSearch(props: {
   setImage: (image: string) => void
   className?: string
 }) {
-  const [did, setDid] = useState('')
-  const [query, setQuery] = useState('')
+  const [did, setDid] = useState('taoli.bit')
   const { data: addresses = [] } = useRelatedAddresses(did)
-  const { data } = useCollections(addresses)
-  const collections = useMemo(
-    () =>
-      data?.filter(({ collection }) =>
-        collection.name.toLowerCase().includes(query.toLowerCase()),
-      ),
-    [data, query],
-  )
 
   return (
-    <div className={clsx('w-96', props.className)}>
+    <div className={clsx('relative h-full w-96', props.className)}>
       <input
         placeholder="vitalik.bit"
         value={did}
         onChange={(e) => setDid(e.target.value)}
+        className="absolute inset-x-0 top-0 bg-gray-300/50 px-8 py-6 text-2xl font-bold leading-normal text-gray-800 outline-none backdrop-blur-md"
       />
-      {collections?.length ? (
-        <>
-          <input
-            placeholder="filter collections"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-          />
-          {collections.map((collection) => (
-            <div key={collection.collection.id}>
-              {collection.collection.name}
-            </div>
-          ))}
-        </>
-      ) : null}
+      <NftCollections addresses={addresses} className="h-full pt-[84px]" />
     </div>
   )
 }

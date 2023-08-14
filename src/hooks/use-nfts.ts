@@ -56,9 +56,10 @@ export function useCollections(addresses: string[]) {
 export type Token = {
   contract: string
   token: string
+  image?: string
 }
 
-export function useTokens(addresses: string[], collection?: string) {
+export function useTokens(addresses: string[], collection: string) {
   return useSWR<Token[]>(
     addresses.length ? ['tokens', addresses, collection] : null,
     async () => {
@@ -69,15 +70,14 @@ export function useTokens(addresses: string[], collection?: string) {
               token: { contract: string; tokenId: string; image?: string }
             }[]
           }>(
-            `https://api.reservoir.tools/users/${address}/tokens/v7?sortBy=lastAppraisalValue&limit=200${
-              collection ? `&collection=${collection}` : ''
-            }`,
+            `https://api.reservoir.tools/users/${address}/tokens/v7?sortBy=lastAppraisalValue&limit=200&collection=${collection}`,
           )
           return json.tokens
             .filter(({ token }) => collection || token.image)
             .map(({ token }) => ({
               contract: token.contract,
               token: token.tokenId,
+              image: token.image,
             }))
         }),
       )

@@ -110,15 +110,17 @@ export async function getRelatedAddresses(did: string): Promise<string[]> {
       getEnsOwner(did),
       getEnsAddress(did),
     ])
-    return uniq(compact([manager, owner, address]).map(getAddress))
+    return uniq(
+      compact([manager, owner, address]).map((address) => getAddress(address)),
+    )
   }
   if (didSystem === DidSystem.LENS) {
     const address = await getEnsAddress(`${did}.xyz`)
-    return compact([address]).map(getAddress)
+    return compact([address]).map((address) => getAddress(address))
   }
   if (didSystem === DidSystem.BIT) {
     const { manager, owner } = await getBitAccountInfo(did)
-    return uniq(compact([manager, owner]).map(getAddress))
+    return uniq(compact([manager, owner]).map((address) => getAddress(address)))
   }
-  return [did]
+  return []
 }
