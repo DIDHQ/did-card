@@ -1,6 +1,6 @@
+import { useState } from 'react'
 import CardPreview from '@/components/card-preview'
 import DIDSearch from '@/components/did-search'
-import { useState } from 'react'
 
 export default function IndexPage() {
   const [did, setDid] = useState('')
@@ -8,8 +8,8 @@ export default function IndexPage() {
 
   return (
     <div className="flex">
-      <DIDSearch setDid={setDid} setImage={setImage} className="flex-1 w-0" />
-      <CardPreview did={did} image={image} className="flex-1 w-0" />
+      <DIDSearch setDid={setDid} setImage={setImage} className="shrink-0" />
+      <CardPreview did={did} image={image} className="w-0 flex-1" />
     </div>
   )
 }

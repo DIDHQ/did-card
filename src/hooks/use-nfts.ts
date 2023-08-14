@@ -38,20 +38,18 @@ export function useCollections(addresses: string[]) {
             {} as Record<string, Collection[]>,
           ),
         ),
-        map(
-          (collections) =>
-            ({
-              collection: collections[0]!.collection,
-              ownership: {
-                tokenCount: sumBy(collections, (collection) =>
-                  parseInt(collection.ownership.tokenCount),
-                ).toString(),
-              },
-            }) satisfies Collection,
-        ),
+        map((collections) => ({
+          collection: collections[0]!.collection,
+          ownership: {
+            tokenCount: sumBy(collections, (collection) =>
+              parseInt(collection.ownership.tokenCount),
+            ).toString(),
+          },
+        })),
         sortBy([(collection) => collection.collection.volume.allTime, 'desc']),
       )
     },
+    { revalidateOnFocus: false },
   )
 }
 
@@ -85,5 +83,6 @@ export function useTokens(addresses: string[], collection?: string) {
       )
       return nfts.flatMap((tokens) => tokens)
     },
+    { revalidateOnFocus: false },
   )
 }
