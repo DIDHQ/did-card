@@ -12,14 +12,14 @@ export default function DIDSearch(props: {
   const { data: addresses = [] } = useRelatedAddresses(did)
 
   return (
-    <div className={clsx('relative h-full w-96', props.className)}>
+    <div className={clsx('flex h-full flex-col', props.className)}>
       <input
         placeholder="vitalik.bit"
         value={did}
         onChange={(e) => setDid(e.target.value)}
-        className="absolute inset-x-0 top-0 bg-gray-300/50 px-8 py-6 text-2xl font-bold leading-normal text-gray-800 outline-none backdrop-blur-md"
+        className="shrink-0 bg-gray-100 px-8 py-6 text-2xl font-bold leading-normal text-gray-800 outline-none"
       />
-      <NftCollections addresses={addresses} className="h-full pt-[84px]" />
+      <NftCollections addresses={addresses} className="h-0 flex-1" />
     </div>
   )
 }

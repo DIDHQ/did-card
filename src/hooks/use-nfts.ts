@@ -3,13 +3,11 @@ import { pipe, sortBy, values, map, sumBy } from 'remeda'
 import { fetchJSON } from '@/utils/fetch'
 
 export type Collection = {
-  collection: {
-    id: string
-    name: string
-    image?: string
-    volume: { allTime: number }
-  }
-  ownership: { tokenCount: string }
+  id: string
+  name: string
+  image?: string
+  volume: number
+  tokenCount: number
 }
 
 export function useCollections(addresses: string[]) {
@@ -18,7 +16,17 @@ export function useCollections(addresses: string[]) {
     async () => {
       const collections = await Promise.all(
         addresses.map(async (address) => {
-          const json = await fetchJSON<{ collections: Collection[] }>(
+          const json = await fetchJSON<{
+            collections: {
+              collection: {
+                id: string
+                name: string
+                image?: string
+                volume: { allTime: number }
+              }
+              ownership: { tokenCount: string }
+            }[]
+          }>(
             `https://api.reservoir.tools/users/${address}/collections/v3?limit=100`,
           )
           return json.collections.filter(({ collection }) => collection.image)
@@ -28,25 +36,27 @@ export function useCollections(addresses: string[]) {
       return pipe(
         values(
           collections.flat().reduce(
-            (obj, collection) => {
-              if (!obj[collection.collection.id]) {
-                obj[collection.collection.id] = []
+            (obj, { collection, ownership }) => {
+              if (!obj[collection.id]) {
+                obj[collection.id] = []
               }
-              obj[collection.collection.id]!.push(collection)
+              obj[collection.id]!.push({
+                id: collection.id,
+                name: collection.name,
+                image: collection.name,
+                volume: collection.volume.allTime,
+                tokenCount: parseInt(ownership.tokenCount, 10),
+              })
               return obj
             },
             {} as Record<string, Collection[]>,
           ),
         ),
         map((collections) => ({
-          collection: collections[0]!.collection,
-          ownership: {
-            tokenCount: sumBy(collections, (collection) =>
-              parseInt(collection.ownership.tokenCount),
-            ).toString(),
-          },
+          ...collections[0]!,
+          tokenCount: sumBy(collections, ({ tokenCount }) => tokenCount),
         })),
-        sortBy([(collection) => collection.collection.volume.allTime, 'desc']),
+        sortBy([({ volume }) => volume, 'desc']),
       )
     },
     { revalidateOnFocus: false },
@@ -72,13 +82,11 @@ export function useTokens(addresses: string[], collection: string) {
           }>(
             `https://api.reservoir.tools/users/${address}/tokens/v7?sortBy=lastAppraisalValue&limit=200&collection=${collection}`,
           )
-          return json.tokens
-            .filter(({ token }) => collection || token.image)
-            .map(({ token }) => ({
-              contract: token.contract,
-              token: token.tokenId,
-              image: token.image,
-            }))
+          return json.tokens.map(({ token }) => ({
+            contract: token.contract,
+            token: token.tokenId,
+            image: token.image,
+          }))
         }),
       )
       return nfts.flatMap((tokens) => tokens)
