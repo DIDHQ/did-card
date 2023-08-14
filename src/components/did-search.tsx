@@ -8,14 +8,14 @@ export default function DIDSearch(props: {
   setImage: (image: string) => void
   className?: string
 }) {
-  const [did, setDid] = useState('taoli.bit')
+  const [did, setDid] = useState('')
   const { data: addresses = [] } = useRelatedAddresses(did)
 
   return (
     <div className={clsx('flex h-full flex-col', props.className)}>
       <input
         autoFocus
-        placeholder="vitalik.bit"
+        placeholder="Your DID"
         value={did}
         onChange={(e) => setDid(e.target.value)}
         onBlur={() => props.setDid(did)}
