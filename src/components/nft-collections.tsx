@@ -1,9 +1,10 @@
 import { GroupedVirtuoso } from 'react-virtuoso'
 import NftTokens from './nft-tokens'
-import { useCollections } from '@/hooks/use-nfts'
+import { Token, useCollections } from '@/hooks/use-nfts'
 
 export default function NftCollections(props: {
   addresses: string[]
+  onSelect(token: Token): void
   className?: string
 }) {
   const { data: collections = [] } = useCollections(props.addresses)
@@ -23,6 +24,7 @@ export default function NftCollections(props: {
         <NftTokens
           addresses={props.addresses}
           collection={collections[index]!}
+          onSelect={props.onSelect}
           className="p-6"
         />
       )}
