@@ -1,4 +1,5 @@
 import clsx from 'clsx'
+import ParallaxStars from './parallax-stars'
 
 export default function CardPreview(props: {
   did: string
@@ -6,17 +7,47 @@ export default function CardPreview(props: {
   className?: string
 }) {
   return (
-    <div className={clsx('flex items-center justify-center', props.className)}>
-      <div className="flex h-[337pt] w-[212.5pt] flex-col overflow-hidden rounded-[12.5pt]">
-        <img src={props.image} alt="card" className="shrink-0" />
-        <div className="flex h-0 flex-1 items-end justify-between bg-black">
-          <div className="flex h-full w-0 flex-1 flex-col items-center justify-center pl-[20pt]">
-            <div className="text-[12pt] font-semibold text-gray-500">I AM</div>
-            <div className="mb-[12pt] text-[32pt] font-bold text-white">
-              {props.did}
+    <div className={clsx('relative', props.className)}>
+      <ParallaxStars
+        stars={100}
+        speed={0.3}
+        color="#000000"
+        className="h-full w-full"
+      />
+      <div
+        className={clsx(
+          'absolute inset-0 flex h-full w-full items-center justify-center',
+          props.className,
+        )}
+      >
+        <div className="flex h-[337pt] w-[212.5pt] flex-col overflow-hidden rounded-[12.5pt] shadow-2xl">
+          {props.image ? (
+            <img
+              src={props.image}
+              alt="card"
+              className="aspect-square shrink-0 bg-white object-cover"
+            />
+          ) : (
+            <div className="flex aspect-square shrink-0 items-center justify-center bg-gray-400 p-[32pt] text-white">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path
+                  fill="currentColor"
+                  d="M11.07 12.85c.77-1.39 2.25-2.21 3.11-3.44c.91-1.29.4-3.7-2.18-3.7c-1.69 0-2.52 1.28-2.87 2.34L6.54 6.96C7.25 4.83 9.18 3 11.99 3c2.35 0 3.96 1.07 4.78 2.41c.7 1.15 1.11 3.3.03 4.9c-1.2 1.77-2.35 2.31-2.97 3.45c-.25.46-.35.76-.35 2.24h-2.89c-.01-.78-.13-2.05.48-3.15zM14 20c0 1.1-.9 2-2 2s-2-.9-2-2s.9-2 2-2s2 .9 2 2z"
+                />
+              </svg>
             </div>
+          )}
+          <div className="flex h-0 flex-1 items-end justify-between bg-black">
+            <div className="flex h-full w-0 flex-1 flex-col items-center justify-center pl-[20pt]">
+              <div className="text-[12pt] font-semibold text-gray-500">
+                I AM
+              </div>
+              <div className="mb-[12pt] text-[32pt] font-bold text-white">
+                {props.did}
+              </div>
+            </div>
+            <NfcIcon className="mb-[10pt] ml-[-10pt] mr-[10pt] h-[20pt] w-[20pt] shrink-0 text-white" />
           </div>
-          <NfcIcon className="mb-[10pt] ml-[-10pt] mr-[10pt] h-[20pt] w-[20pt] shrink-0 text-white" />
         </div>
       </div>
     </div>
