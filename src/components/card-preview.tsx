@@ -11,8 +11,8 @@ export default function CardPreview(props: {
       <ParallaxStars
         stars={100}
         speed={0.3}
-        color="#000000"
-        className="h-full w-full"
+        color="#ffffff"
+        className="h-full w-full bg-gradient"
       />
       <div
         className={clsx(
