@@ -1,4 +1,7 @@
 import clsx from 'clsx'
+import { toPng } from 'html-to-image'
+import { useRef } from 'react'
+import download from 'downloadjs'
 import ParallaxStars from './parallax-stars'
 
 export default function CardPreview(props: {
@@ -6,6 +9,8 @@ export default function CardPreview(props: {
   image: string
   className?: string
 }) {
+  const ref = useRef(null)
+
   return (
     <div className={clsx('relative', props.className)}>
       <ParallaxStars
@@ -16,11 +21,14 @@ export default function CardPreview(props: {
       />
       <div
         className={clsx(
-          'absolute inset-0 flex h-full w-full items-center justify-center',
+          'absolute inset-0 flex h-full w-full flex-col items-center justify-center',
           props.className,
         )}
       >
-        <div className="flex h-[337pt] w-[212.5pt] flex-col overflow-hidden rounded-[12.5pt] shadow-2xl">
+        <div
+          ref={ref}
+          className="flex h-[337pt] w-[212.5pt] flex-col overflow-hidden rounded-[12.5pt] shadow-2xl"
+        >
           {props.image ? (
             <img
               src={props.image}
@@ -49,6 +57,18 @@ export default function CardPreview(props: {
             <NfcIcon className="mb-[10pt] ml-[-10pt] mr-[10pt] h-[20pt] w-[20pt] shrink-0 text-white" />
           </div>
         </div>
+        <button
+          onClick={() => {
+            if (ref.current) {
+              toPng(ref.current, { quality: 1, skipAutoScale: true }).then(
+                (png) => download(png, `${props.did}.png`, 'image/png'),
+              )
+            }
+          }}
+          className="mt-16 rounded-full bg-white px-4 py-3 font-semibold leading-4 text-gray-800 shadow-2xl transition-colors hover:bg-gray-200"
+        >
+          DOWNLOAD
+        </button>
       </div>
     </div>
   )

@@ -11,6 +11,12 @@ dependencies:
   clsx:
     specifier: ^2.0.0
     version: 2.0.0
+  downloadjs:
+    specifier: ^1.4.7
+    version: 1.4.7
+  html-to-image:
+    specifier: ^1.11.11
+    version: 1.11.11
   next:
     specifier: ^13.4.13
     version: 13.4.13(react-dom@18.2.0)(react@18.2.0)
@@ -37,6 +43,9 @@ dependencies:
     version: 1.6.0(typescript@5.1.6)
 
 devDependencies:
+  '@types/downloadjs':
+    specifier: ^1.4.3
+    version: 1.4.3
   '@types/node':
     specifier: ^20.5.0
     version: 20.5.0
@@ -336,6 +345,10 @@ packages:
     dependencies:
       tslib: 2.6.1
     dev: false
+
+  /@types/downloadjs@1.4.3:
+    resolution: {integrity: sha512-MjJepFle/tLtT2/jmDNth6ZnwWzEhm40L+olE5HKR70ISUCfgT55eqreeHldAzFLY2HDUGsn8zgyto8KygN0CA==}
+    dev: true
 
   /@types/json5@0.0.29:
     resolution: {integrity: sha512-dRLjCWHYg4oaA77cxO64oO+7JwCwnIzkZPdrrC71jQmQtlhM556pwKo5bUzqvZndkVbeFLIIi+9TC40JNF5hNQ==}
@@ -834,6 +847,10 @@ packages:
     dependencies:
       esutils: 2.0.3
     dev: true
+
+  /downloadjs@1.4.7:
+    resolution: {integrity: sha512-LN1gO7+u9xjU5oEScGFKvXhYf7Y/empUIIEAGBs1LzUq/rg5duiDrkuH5A2lQGd5jfMOb9X9usDa2oVXwJ0U/Q==}
+    dev: false
 
   /electron-to-chromium@1.4.490:
     resolution: {integrity: sha512-6s7NVJz+sATdYnIwhdshx/N/9O6rvMxmhVoDSDFdj6iA45gHR8EQje70+RYsF4GeB+k0IeNSBnP7yG9ZXJFr7A==}
@@ -1459,6 +1476,10 @@ packages:
     engines: {node: '>= 0.4.0'}
     dependencies:
       function-bind: 1.1.1
+
+  /html-to-image@1.11.11:
+    resolution: {integrity: sha512-9gux8QhvjRO/erSnDPv28noDZcPZmYE7e1vFsBLKLlRlKDSqNJYebj6Qz1TGd5lsRV+X+xYyjCKjuZdABinWjA==}
+    dev: false
 
   /ignore@5.2.4:
     resolution: {integrity: sha512-MAb38BcSbH0eHNBxn7ql2NH/kX33OkB3lZ1BNdh7ENeRChHTYsTvWrMubiIAMNS2llXEEgZ1MUOBtXChP3kaFQ==}
