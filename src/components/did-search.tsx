@@ -19,7 +19,7 @@ export default function DIDSearch(props: {
         value={did}
         onChange={(e) => setDid(e.target.value)}
         onBlur={() => props.setDid(did)}
-        className="shrink-0 bg-transparent p-6 text-4xl font-bold leading-normal text-white outline-none"
+        className="shrink-0 bg-transparent p-6 text-4xl font-bold leading-normal text-gray-800 outline-none"
       />
       <NftCollections
         addresses={addresses}
