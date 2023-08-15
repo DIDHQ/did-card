@@ -142,7 +142,7 @@ export default function CardPreview(props: {
           >
             <div
               style={{ transform: 'rotateY(180deg)' }}
-              className="absolute bottom-10 mx-auto w-full text-center text-white"
+              className="absolute bottom-10 mx-auto w-full select-none text-center text-white"
             >
               d.id
             </div>
