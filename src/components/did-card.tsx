@@ -2,6 +2,7 @@ import { forwardRef, useEffect } from 'react'
 import satori from 'satori'
 import useSWR from 'swr'
 import svgToMiniDataURI from 'mini-svg-data-uri'
+import { LoadingIcon } from './icon'
 
 export default forwardRef<HTMLImageElement, { did?: string; image?: string }>(
   function DidCard(props, ref) {
@@ -124,13 +125,22 @@ export default forwardRef<HTMLImageElement, { did?: string; image?: string }>(
       }
     }, [error])
 
-    return (
+    return svg ? (
       <img
         ref={ref}
         src={svg}
         alt="card"
         className="h-[337pt] w-[212.5pt] overflow-hidden rounded-[12.5pt] object-cover shadow-2xl"
       />
+    ) : (
+      <div
+        ref={ref}
+        className="h-[337pt] w-[212.5pt] overflow-hidden rounded-[12.5pt] bg-black object-cover shadow-2xl"
+      >
+        <div className="flex h-[215.5pt] w-full items-center justify-center bg-gray-400">
+          <LoadingIcon className="h-24 w-24 text-white" />
+        </div>
+      </div>
     )
   },
 )
