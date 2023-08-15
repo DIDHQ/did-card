@@ -1,20 +1,16 @@
 import clsx from 'clsx'
-import { forwardRef } from 'react'
 import { Collection, Token, useTokens } from '@/hooks/use-nfts'
 
-export default forwardRef<
-  HTMLDivElement,
-  {
-    addresses: string[]
-    collection: Collection
-    onSelect(token: Token): void
-    className?: string
-  }
->(function NftTokens(props, ref) {
+export default function NftTokens(props: {
+  addresses: string[]
+  collection: Collection
+  onSelect(token: Token): void
+  className?: string
+}) {
   const { data: tokens } = useTokens(props.addresses, props.collection.id)
 
   return (
-    <div ref={ref} className={clsx('flex flex-wrap gap-6', props.className)}>
+    <div className={clsx('flex flex-wrap gap-6', props.className)}>
       {tokens
         ? tokens.map((token) =>
             token.image ? (
@@ -43,4 +39,4 @@ export default forwardRef<
           )}
     </div>
   )
-})
+}
