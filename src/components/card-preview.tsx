@@ -18,6 +18,7 @@ export default function CardPreview(props: {
   const glareRef = useRef<HTMLDivElement>(null)
   const cardFrontFaceRef = useRef<HTMLDivElement>(null)
   const [animated, setAnimated] = useState(false)
+  const [flipped, setFlipped] = useState(false)
   const calculateAngle = useCallback((e: MouseEvent) => {
     const front = cardFrontFaceRef.current
     const back = cardBackFaceRef.current
@@ -107,10 +108,12 @@ export default function CardPreview(props: {
       >
         <div
           ref={cardRef}
-          className="relative float-left h-[337pt] w-[212.5pt] bg-transparent transition-all duration-200 ease-out"
+          onClick={() => setFlipped((old) => !old)}
+          className="relative float-left h-[337pt] w-[212.5pt] cursor-pointer bg-transparent transition-all duration-200 ease-out"
           style={{
             backfaceVisibility: 'visible',
             transformStyle: 'preserve-3d',
+            transform: flipped ? 'rotateY(180deg)' : undefined,
           }}
         >
           <div
@@ -131,10 +134,8 @@ export default function CardPreview(props: {
               transform: 'rotateX(0deg) rotateY(0deg) scale(1)',
               filter: 'drop-shadow(0 15px 15px rgba(0,0,0,0.3))',
               willChange: 'transform, filter',
-              backgroundSize: 'calc(100% + 6px) auto',
-              backgroundPosition: '-3px -3px',
             }}
-            className="h-full w-full overflow-hidden rounded-[12.5pt] object-cover transition-all duration-150 ease-out"
+            className="h-full w-full overflow-hidden rounded-[12.5pt] bg-cover object-cover transition-all duration-150 ease-out"
           >
             <div
               ref={glareRef}
