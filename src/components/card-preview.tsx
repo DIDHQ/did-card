@@ -19,7 +19,7 @@ export default function CardPreview(props: {
   const cardFrontFaceRef = useRef<HTMLDivElement>(null)
   const [animated, setAnimated] = useState(false)
   const [flipped, setFlipped] = useState(false)
-  const calculateAngle = useCallback((e: MouseEvent) => {
+  const calculateAngle = useCallback((e: MouseEvent, flipped: boolean) => {
     const front = cardFrontFaceRef.current
     const back = cardBackFaceRef.current
     const parent = cardRef.current
@@ -56,7 +56,9 @@ export default function CardPreview(props: {
 
     // Set the items transform CSS property
     front.style.transform = `rotateY(${calcAngleX}deg) rotateX(${-calcAngleY}deg) scale(1.04)`
-    back.style.transform = `rotateY(${calcAngleX}deg) rotateX(${-calcAngleY}deg) scale(1.04) translateZ(-4px)`
+    back.style.transform = flipped
+      ? `rotateY(${calcAngleX}deg) rotateX(${-calcAngleY}deg) scale(1.06) translateZ(-4px)`
+      : `rotateY(${calcAngleX}deg) rotateX(${-calcAngleY}deg) scale(1.04) translateZ(-4px)`
 
     // Reapply this to the shadow, with different dividers
     const calcShadowX = (x - halfWidth) / 3
@@ -75,22 +77,27 @@ export default function CardPreview(props: {
     const dropShadowColor = `rgba(0, 0, 0, 0.3)`
     setAnimated(false)
     front.style.transform = `rotateY(0deg) rotateX(0deg) scale(1)`
-    back.style.transform = `rotateY(0deg) rotateX(0deg) scale(1.01) translateZ(-4px)`
+    back.style.transform = flipped
+      ? `rotateY(0deg) rotateX(0deg) scale(1.01) translateZ(-4px)`
+      : `rotateY(0deg) rotateX(0deg) scale(1) translateZ(-4px)`
     front.style.filter = `drop-shadow(0 10px 15px ${dropShadowColor})`
-  }, [])
+  }, [flipped])
   useEffect(() => {
     const parent = cardRef.current
 
-    parent?.addEventListener('mouseenter', calculateAngle)
-    parent?.addEventListener('mousemove', calculateAngle)
+    function handler(e: MouseEvent) {
+      calculateAngle(e, flipped)
+    }
+    parent?.addEventListener('mouseenter', handler)
+    parent?.addEventListener('mousemove', handler)
     parent?.addEventListener('mouseleave', resetAngel)
 
     return () => {
-      parent?.removeEventListener('mouseenter', calculateAngle)
-      parent?.removeEventListener('mousemove', calculateAngle)
+      parent?.removeEventListener('mouseenter', handler)
+      parent?.removeEventListener('mousemove', handler)
       parent?.removeEventListener('mouseleave', resetAngel)
     }
-  }, [calculateAngle, resetAngel])
+  }, [calculateAngle, flipped, resetAngel])
 
   return (
     <div className={clsx('relative', props.className)}>
@@ -108,7 +115,12 @@ export default function CardPreview(props: {
       >
         <div
           ref={cardRef}
-          onClick={() => setFlipped((old) => !old)}
+          onClick={(e) => {
+            setFlipped((old) => {
+              calculateAngle(e.nativeEvent, !old)
+              return !old
+            })
+          }}
           className="relative float-left h-[337pt] w-[212.5pt] cursor-pointer bg-transparent transition-all duration-200 ease-out"
           style={{
             backfaceVisibility: 'visible',
