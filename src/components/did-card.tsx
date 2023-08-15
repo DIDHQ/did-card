@@ -1,13 +1,18 @@
-import { forwardRef, useEffect } from 'react'
+import { CSSProperties, ReactNode, forwardRef, useEffect } from 'react'
 import satori from 'satori'
 import useSWR from 'swr'
 import svgToMiniDataURI from 'mini-svg-data-uri'
-import clsx from 'clsx'
 import { LoadingIcon } from './icon'
 
 export default forwardRef<
-  HTMLImageElement,
-  { did?: string; image?: string; className?: string }
+  HTMLDivElement,
+  {
+    did?: string
+    image?: string
+    children?: ReactNode
+    style?: CSSProperties
+    className?: string
+  }
 >(function DidCard(props, ref) {
   const { data: fonts } = useSWR(
     ['fonts'],
@@ -128,13 +133,22 @@ export default forwardRef<
     }
   }, [error])
 
-  return svg ? (
-    <img ref={ref} src={svg} alt="card" className={props.className} />
-  ) : (
-    <div ref={ref} className={clsx('bg-black', props.className)}>
-      <div className="flex h-[215.5pt] w-full items-center justify-center bg-gray-400">
-        <LoadingIcon className="h-24 w-24 text-white" />
-      </div>
+  return (
+    <div
+      ref={ref}
+      style={{
+        ...props.style,
+        backgroundImage: svg ? `url("${svg}")` : undefined,
+      }}
+      className={props.className}
+    >
+      {svg ? (
+        props.children
+      ) : (
+        <div className="flex h-[215.5pt] w-full items-center justify-center bg-gray-400">
+          <LoadingIcon className="h-24 w-24 text-white" />
+        </div>
+      )}
     </div>
   )
 })
