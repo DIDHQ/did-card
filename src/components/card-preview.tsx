@@ -26,7 +26,7 @@ export default function CardPreview(props: {
           props.className,
         )}
       >
-        <DidCard did={props.did} image={props.image} />
+        <DidCard ref={ref} did={props.did} image={props.image} />
         <button
           onClick={() => {
             if (ref.current) {
