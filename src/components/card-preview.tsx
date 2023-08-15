@@ -98,6 +98,9 @@ export default function CardPreview(props: {
       parent?.removeEventListener('mouseleave', resetAngel)
     }
   }, [calculateAngle, flipped, resetAngel])
+  useEffect(() => {
+    setFlipped(false)
+  }, [props.did, props.image])
 
   return (
     <div className={clsx('relative', props.className)}>
@@ -154,7 +157,7 @@ export default function CardPreview(props: {
               filter: 'drop-shadow(0 15px 15px rgba(0,0,0,0.3))',
               willChange: 'transform, filter',
             }}
-            className="h-full w-full overflow-hidden rounded-[12.5pt] bg-cover object-cover transition-all duration-150 ease-out"
+            className="h-full w-full overflow-hidden rounded-[12.5pt] bg-black bg-cover object-cover transition-all duration-150 ease-out"
           >
             <div
               ref={glareRef}
