@@ -26,7 +26,12 @@ export default function CardPreview(props: {
           props.className,
         )}
       >
-        <DidCard ref={ref} did={props.did} image={props.image} />
+        <DidCard
+          ref={ref}
+          did={props.did}
+          image={props.image}
+          className="h-[337pt] w-[212.5pt] overflow-hidden rounded-[12.5pt] object-cover shadow-2xl"
+        />
         <button
           onClick={() => {
             if (ref.current) {
