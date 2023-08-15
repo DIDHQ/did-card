@@ -2,8 +2,10 @@ import clsx from 'clsx'
 import { toPng } from 'html-to-image'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import download from 'downloadjs'
-import ParallaxStars from './parallax-stars'
+import dynamic from 'next/dynamic'
 import DidCard from './did-card'
+
+const ParallaxStars = dynamic(() => import('./parallax-stars'), { ssr: false })
 
 /**
  * @see https://fjolt.com/article/css-3d-interactive-flippable-cards
