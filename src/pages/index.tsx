@@ -1,10 +1,15 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import CardPreview from '@/components/card-preview'
 import DIDSearch from '@/components/did-search'
 
 export default function IndexPage() {
   const [did, setDid] = useState('')
   const [image, setImage] = useState('')
+  useEffect(() => {
+    if (!did) {
+      setImage('')
+    }
+  }, [did])
 
   return (
     <div className="flex h-screen w-screen">
