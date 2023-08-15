@@ -2,6 +2,7 @@ import { CSSProperties, ReactNode, forwardRef, useEffect } from 'react'
 import satori from 'satori'
 import useSWR from 'swr'
 import svgToMiniDataURI from 'mini-svg-data-uri'
+import twemoji from 'twemoji'
 import { LoadingIcon } from './icon'
 
 export default forwardRef<
@@ -121,6 +122,20 @@ export default forwardRef<
           width: 1988,
           height: 3108,
           fonts: fonts!.map((data) => ({ name: 'Inter', data })),
+          loadAdditionalAsset: async (code: string, segment: string) => {
+            if (code === 'emoji') {
+              const response = await fetch(
+                `https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/svg/${twemoji.convert.toCodePoint(
+                  segment,
+                )}.svg`,
+              )
+              const arrayBuffer = await response.arrayBuffer()
+              return `data:image/svg+xml;base64,${Buffer.from(
+                arrayBuffer,
+              ).toString('base64')}`
+            }
+            return []
+          },
         },
       )
       return svgToMiniDataURI(svg)
