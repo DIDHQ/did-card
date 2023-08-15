@@ -133,10 +133,17 @@ export default function CardPreview(props: {
             style={{
               willChange: 'transform, filter',
               transform: 'rotateX(0) rotateY(0deg) scale(1) translateZ(-4px)',
-              background: 'linear-gradient(45deg, #0b0b2a, #0b0b2a)',
+              background: 'black',
             }}
             className="absolute inset-0 h-full w-full overflow-hidden rounded-[12.5pt] transition-all duration-150 ease-out"
-          />
+          >
+            <div
+              style={{ transform: 'rotateY(180deg)' }}
+              className="absolute bottom-10 mx-auto w-full text-center text-white"
+            >
+              d.id
+            </div>
+          </div>
           <DidCard
             ref={cardFrontFaceRef}
             did={props.did}
