@@ -10,12 +10,12 @@ export type Collection = {
   tokenCount: number
 }
 
-export function useCollections(addresses: string[]) {
+export function useCollections(addresses?: string[]) {
   return useSWR<Collection[]>(
-    addresses.length ? ['collections', addresses] : null,
+    addresses?.length ? ['collections', addresses] : null,
     async () => {
       const collections = await Promise.all(
-        addresses.map(async (address) => {
+        addresses!.map(async (address) => {
           const json = await fetchJSON<{
             collections: {
               collection: {
