@@ -27,6 +27,7 @@ export default trackWindowScroll(function NftTokens(props: {
                 alt="nft"
                 scrollPosition={props.scrollPosition}
                 onClick={() => props.onSelect(token)}
+                wrapperClassName="block h-32 w-32"
                 className="h-32 w-32 cursor-pointer rounded-xl bg-gray-50 object-cover"
               />
             ) : (

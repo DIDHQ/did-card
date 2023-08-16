@@ -10,11 +10,11 @@
     "format": "prettier --write ."
   },
   "dependencies": {
+    "@resvg/resvg-wasm": "^2.4.1",
     "@uidotdev/usehooks": "^2.1.0",
     "allotment": "^1.19.2",
     "clsx": "^2.0.0",
     "downloadjs": "^1.4.7",
-    "html-to-image": "^1.11.11",
     "mini-svg-data-uri": "^1.4.4",
     "next": "^13.4.16",
     "react": "^18.2.0",
