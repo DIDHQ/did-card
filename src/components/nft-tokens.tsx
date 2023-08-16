@@ -1,10 +1,16 @@
 import clsx from 'clsx'
+import {
+  LazyLoadImage,
+  ScrollPosition,
+  trackWindowScroll,
+} from 'react-lazy-load-image-component'
 import { Collection, Token, useTokens } from '@/hooks/use-nfts'
 
-export default function NftTokens(props: {
+export default trackWindowScroll(function NftTokens(props: {
   addresses: string[]
   collection: Collection
   onSelect(token: Token): void
+  scrollPosition: ScrollPosition
   className?: string
 }) {
   const { data: tokens } = useTokens(props.addresses, props.collection.id)
@@ -14,11 +20,12 @@ export default function NftTokens(props: {
       {tokens
         ? tokens.map((token) =>
             token.image ? (
-              <img
+              <LazyLoadImage
                 key={token.token}
                 src={token.image}
+                effect="opacity"
                 alt="nft"
-                loading="lazy"
+                scrollPosition={props.scrollPosition}
                 onClick={() => props.onSelect(token)}
                 className="h-32 w-32 cursor-pointer rounded-xl bg-gray-50 object-cover"
               />
@@ -39,4 +46,4 @@ export default function NftTokens(props: {
           )}
     </div>
   )
-}
+})
