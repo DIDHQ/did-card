@@ -10,7 +10,7 @@ const nfc = svgToMiniDataURI(
 
 export async function generate(did?: string, image?: string) {
   const wasm = await fetch(
-    'https://unpkg.com/yoga-wasm-web/dist/yoga.wasm',
+    new URL('yoga-wasm-web/dist/yoga.wasm', import.meta.url),
   ).then((res) => res.arrayBuffer())
   const yoga = await initYoga(wasm)
   init(yoga)
