@@ -16,7 +16,7 @@ export default function CardPreview(props: {
   image: string
   className?: string
 }) {
-  const { data: svg, error } = useSWR(
+  const { data: svg } = useSWR(
     ['svg', props.did, props.image],
     () => {
       const generate = wrap<Function>(

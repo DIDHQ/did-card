@@ -29,7 +29,6 @@ export default function DIDSearch(props: {
           placeholder="My DID"
           value={did}
           onChange={(e) => setDid(e.target.value)}
-          onBlur={() => props.setDid(did)}
           className="flex-1 bg-transparent p-6 text-4xl font-bold leading-normal text-gray-800 outline-none placeholder:text-gray-400"
         />
       </div>
@@ -37,7 +36,10 @@ export default function DIDSearch(props: {
         <NftCollections
           addresses={addresses}
           collections={collections}
-          onSelect={(token) => props.setImage(token.image!)}
+          onSelect={(token) => {
+            props.setImage(token.image!)
+            props.setDid(did)
+          }}
           className="h-0 flex-1"
         />
       ) : null}
