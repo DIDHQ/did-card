@@ -1,9 +1,22 @@
-import satori from 'satori'
+import satori, { init } from 'satori/wasm'
 import useSWR from 'swr'
 import twemoji from 'twemoji'
 import svgToMiniDataURI from 'mini-svg-data-uri'
+import initYoga from 'yoga-wasm-web'
 
 export default function useSVG(did?: string, image?: string) {
+  const { data: initialized } = useSWR(
+    ['satori'],
+    async () => {
+      const wasm = await fetch(
+        'https://unpkg.com/yoga-wasm-web/dist/yoga.wasm',
+      ).then((res) => res.arrayBuffer())
+      const yoga = await initYoga(wasm)
+      init(yoga)
+      return true
+    },
+    { revalidateOnFocus: false },
+  )
   const { data: fonts } = useSWR(
     ['fonts'],
     async () => {
@@ -17,7 +30,7 @@ export default function useSVG(did?: string, image?: string) {
     { revalidateOnFocus: false },
   )
   const { data: text } = useSWR(
-    fonts ? ['text', did] : null,
+    initialized && fonts ? ['text', did] : null,
     async () => {
       const svg = await satori(
         <div
@@ -61,7 +74,7 @@ export default function useSVG(did?: string, image?: string) {
     { revalidateOnFocus: false },
   )
   const { data: card } = useSWR(
-    fonts && text ? ['card', text, image, fonts] : null,
+    initialized && fonts && text ? ['card', text, image, fonts] : null,
     async () => {
       const svg = await satori(
         <div
