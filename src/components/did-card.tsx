@@ -27,8 +27,46 @@ export default forwardRef<
     },
     { revalidateOnFocus: false },
   )
-  const { data: svg, error } = useSWR(
-    fonts ? ['satori', props.did, props.image, fonts] : null,
+  const { data: text } = useSWR(
+    fonts ? ['text', props.did] : null,
+    async () => {
+      const svg = await satori(
+        <div
+          style={{
+            flexShrink: 0,
+            fontSize: 256,
+            lineHeight: 1,
+            fontWeight: 600,
+            color: 'white',
+          }}
+        >
+          {props.did || '???'}
+        </div>,
+        {
+          height: 256,
+          fonts: fonts!.map((data) => ({ name: 'Inter', data })),
+          loadAdditionalAsset: async (code: string, segment: string) => {
+            if (code === 'emoji') {
+              const response = await fetch(
+                `https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/svg/${twemoji.convert.toCodePoint(
+                  segment,
+                )}.svg`,
+              )
+              const arrayBuffer = await response.arrayBuffer()
+              return `data:image/svg+xml;base64,${Buffer.from(
+                arrayBuffer,
+              ).toString('base64')}`
+            }
+            return []
+          },
+        },
+      )
+      return svgToMiniDataURI(svg)
+    },
+    { revalidateOnFocus: false },
+  )
+  const { data: card, error } = useSWR(
+    fonts ? ['card', text, props.image, fonts] : null,
     async () => {
       const svg = await satori(
         <div
@@ -86,17 +124,11 @@ export default forwardRef<
             >
               I AM
             </div>
-            <div
-              style={{
-                flexShrink: 0,
-                fontSize: 256,
-                lineHeight: 1,
-                fontWeight: 600,
-                color: 'white',
-              }}
-            >
-              {props.did || '???'}
-            </div>
+            <img
+              src={text}
+              alt="did"
+              style={{ height: 256, maxWidth: 1688, objectFit: 'contain' }}
+            />
             <div style={{ flex: 1, height: 0 }} />
             <div
               style={{
@@ -122,20 +154,6 @@ export default forwardRef<
           width: 1988,
           height: 3108,
           fonts: fonts!.map((data) => ({ name: 'Inter', data })),
-          loadAdditionalAsset: async (code: string, segment: string) => {
-            if (code === 'emoji') {
-              const response = await fetch(
-                `https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/svg/${twemoji.convert.toCodePoint(
-                  segment,
-                )}.svg`,
-              )
-              const arrayBuffer = await response.arrayBuffer()
-              return `data:image/svg+xml;base64,${Buffer.from(
-                arrayBuffer,
-              ).toString('base64')}`
-            }
-            return []
-          },
         },
       )
       return svgToMiniDataURI(svg)
@@ -153,11 +171,11 @@ export default forwardRef<
       ref={ref}
       style={{
         ...props.style,
-        backgroundImage: svg ? `url("${svg}")` : undefined,
+        backgroundImage: card ? `url("${card}")` : undefined,
       }}
       className={props.className}
     >
-      {svg ? (
+      {card ? (
         props.children
       ) : (
         <div className="flex h-[215.5pt] w-full items-center justify-center bg-gray-400">
