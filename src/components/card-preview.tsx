@@ -1,11 +1,10 @@
 import clsx from 'clsx'
 import dynamic from 'next/dynamic'
 import useSWRMutation from 'swr/mutation'
-import { Resvg, initWasm } from '@resvg/resvg-wasm'
+import { wrap } from 'comlink'
 import useSWR from 'swr'
 import DidCard from './did-card'
 import { DownloadIcon, LoadingIcon } from './icon'
-import useSVG from '@/hooks/use-svg'
 
 const ParallaxStars = dynamic(() => import('./parallax-stars'), { ssr: false })
 
@@ -17,23 +16,25 @@ export default function CardPreview(props: {
   image: string
   className?: string
 }) {
-  const svg = useSVG(props.did, props.image)
-  const { data: initialized } = useSWR(
-    ['resvg'],
-    async () => {
-      await initWasm(fetch('https://unpkg.com/@resvg/resvg-wasm/index_bg.wasm'))
-      return true
+  const { data: svg, error } = useSWR(
+    ['svg', props.did, props.image],
+    () => {
+      const generate = wrap<Function>(
+        new Worker(new URL('../workers/svg.tsx', import.meta.url)),
+      )
+      return generate.call(generate, props.did, props.image) as string
     },
     { revalidateOnFocus: false },
   )
   const { trigger, isMutating } = useSWRMutation('download', async () => {
-    if (!svg || !initialized) {
+    if (!svg) {
       return
     }
 
-    const image = new Resvg(svg).render()
-    const blob = new Blob([image.asPng()], { type: 'image/png' })
-    const href = URL.createObjectURL(blob)
+    const convert = wrap<Function>(
+      new Worker(new URL('../workers/png.ts', import.meta.url)),
+    )
+    const href = await convert.call(convert, svg)
 
     const anchor = document.createElement('a')
     anchor.setAttribute('download', `${props.did}.png`)
@@ -42,7 +43,6 @@ export default function CardPreview(props: {
     anchor.click()
 
     URL.revokeObjectURL(href)
-    image.free()
   })
 
   return (
@@ -61,11 +61,11 @@ export default function CardPreview(props: {
       >
         <DidCard svg={svg} />
         <button
-          disabled={isMutating || !initialized}
+          disabled={isMutating}
           onClick={() => trigger()}
           className="mt-16 rounded-full bg-white p-2 font-semibold leading-4 shadow-2xl transition-colors hover:bg-gray-200 disabled:cursor-wait"
         >
-          {isMutating || !initialized ? (
+          {isMutating ? (
             <LoadingIcon className="h-8 w-8 text-gray-400" />
           ) : (
             <DownloadIcon className="h-8 w-8 text-gray-800" />
