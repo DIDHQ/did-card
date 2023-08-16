@@ -49,8 +49,7 @@ export default forwardRef<
             if (code === 'emoji') {
               const url = await new Promise<string>((resolve) =>
                 twemoji.parse(segment, {
-                  callback(icon, options) {
-                    console.log(icon, options)
+                  callback(icon) {
                     resolve(
                       `https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/svg/${icon}.svg`,
                     )
