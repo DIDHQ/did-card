@@ -3,7 +3,9 @@ import { toPng } from 'html-to-image'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import download from 'downloadjs'
 import dynamic from 'next/dynamic'
+import useSWRMutation from 'swr/mutation'
 import DidCard from './did-card'
+import { DownloadIcon, LoadingIcon } from './icon'
 
 const ParallaxStars = dynamic(() => import('./parallax-stars'), { ssr: false })
 
@@ -103,6 +105,24 @@ export default function CardPreview(props: {
   useEffect(() => {
     setFlipped(false)
   }, [props.did, props.image])
+  const { trigger, isMutating } = useSWRMutation(
+    'download',
+    () =>
+      cardFrontFaceRef.current
+        ? toPng(cardFrontFaceRef.current, {
+            quality: 1,
+            width: 1988,
+            height: 3108,
+          })
+        : undefined,
+    {
+      onSuccess(png) {
+        if (png) {
+          download(png, `${props.did}.png`, 'image/png')
+        }
+      },
+    },
+  )
 
   return (
     <div className={clsx('relative', props.className)}>
@@ -173,18 +193,15 @@ export default function CardPreview(props: {
           </DidCard>
         </div>
         <button
-          onClick={() => {
-            if (cardFrontFaceRef.current) {
-              toPng(cardFrontFaceRef.current, {
-                quality: 1,
-                width: 1988,
-                height: 3108,
-              }).then((png) => download(png, `${props.did}.png`, 'image/png'))
-            }
-          }}
-          className="mt-16 rounded-full bg-white px-4 py-3 font-semibold leading-4 text-gray-800 shadow-2xl transition-colors hover:bg-gray-200"
+          disabled={isMutating}
+          onClick={() => trigger()}
+          className="mt-16 rounded-full bg-white p-2 font-semibold leading-4 shadow-2xl transition-colors hover:bg-gray-200"
         >
-          DOWNLOAD
+          {isMutating ? (
+            <LoadingIcon className="h-8 w-8 text-gray-400" />
+          ) : (
+            <DownloadIcon className="h-8 w-8 text-gray-800" />
+          )}
         </button>
       </div>
     </div>
