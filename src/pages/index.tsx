@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { Allotment } from 'allotment'
 import CardPreview from '@/components/card-preview'
 import DIDSearch from '@/components/did-search'
 
@@ -12,9 +13,13 @@ export default function IndexPage() {
   }, [did])
 
   return (
-    <div className="flex h-screen w-screen">
-      <DIDSearch setDid={setDid} setImage={setImage} className="w-0 flex-1" />
-      <CardPreview did={did} image={image} className="w-0 flex-1" />
-    </div>
+    <Allotment minSize={320} className="h-screen w-screen">
+      <DIDSearch
+        setDid={setDid}
+        setImage={setImage}
+        className="h-full w-full"
+      />
+      <CardPreview did={did} image={image} className="h-full w-full" />
+    </Allotment>
   )
 }

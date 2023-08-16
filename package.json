@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@uidotdev/usehooks": "^2.1.0",
+    "allotment": "^1.19.2",
     "clsx": "^2.0.0",
     "downloadjs": "^1.4.7",
     "html-to-image": "^1.11.11",
@@ -19,7 +20,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-virtuoso": "^4.5.0",
-    "remeda": "^1.24.0",
+    "remeda": "^1.24.1",
     "satori": "^0.10.3",
     "swr": "^2.2.1",
     "tailwindcss": "^3.3.3",
@@ -37,9 +38,9 @@
     "eslint-config-next": "^13.4.16",
     "eslint-plugin-import": "^2.28.0",
     "eslint-plugin-tailwindcss": "^3.13.0",
-    "postcss": "^8.4.27",
-    "prettier": "^3.0.1",
-    "prettier-plugin-tailwindcss": "^0.5.2",
+    "postcss": "^8.4.28",
+    "prettier": "^3.0.2",
+    "prettier-plugin-tailwindcss": "^0.5.3",
     "typescript": "^5.1.6"
   }
 }
