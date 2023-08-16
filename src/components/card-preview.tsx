@@ -1,5 +1,4 @@
 import clsx from 'clsx'
-import download from 'downloadjs'
 import dynamic from 'next/dynamic'
 import useSWRMutation from 'swr/mutation'
 import { Resvg, initWasm } from '@resvg/resvg-wasm'
@@ -31,8 +30,19 @@ export default function CardPreview(props: {
     if (!svg || !initialized) {
       return
     }
-    const png = new Resvg(svg).render().asPng()
-    download(png, `${props.did}.png`, 'image/png')
+
+    const image = new Resvg(svg).render()
+    const blob = new Blob([image.asPng()], { type: 'image/png' })
+    const href = URL.createObjectURL(blob)
+
+    const anchor = document.createElement('a')
+    anchor.setAttribute('download', `${props.did}.png`)
+    anchor.href = href
+    anchor.setAttribute('target', '_blank')
+    anchor.click()
+
+    URL.revokeObjectURL(href)
+    image.free()
   })
 
   return (
@@ -51,9 +61,9 @@ export default function CardPreview(props: {
       >
         <DidCard svg={svg} />
         <button
-          disabled={isMutating}
+          disabled={isMutating || !initialized}
           onClick={() => trigger()}
-          className="mt-16 rounded-full bg-white p-2 font-semibold leading-4 shadow-2xl transition-colors hover:bg-gray-200"
+          className="mt-16 rounded-full bg-white p-2 font-semibold leading-4 shadow-2xl transition-colors hover:bg-gray-200 disabled:cursor-wait"
         >
           {isMutating || !initialized ? (
             <LoadingIcon className="h-8 w-8 text-gray-400" />

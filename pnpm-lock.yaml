@@ -17,9 +17,6 @@ dependencies:
   clsx:
     specifier: ^2.0.0
     version: 2.0.0
-  downloadjs:
-    specifier: ^1.4.7
-    version: 1.4.7
   mini-svg-data-uri:
     specifier: ^1.4.4
     version: 1.4.4
@@ -61,9 +58,6 @@ dependencies:
     version: 0.3.3
 
 devDependencies:
-  '@types/downloadjs':
-    specifier: ^1.4.3
-    version: 1.4.3
   '@types/node':
     specifier: ^20.5.0
     version: 20.5.0
@@ -387,10 +381,6 @@ packages:
     dependencies:
       tslib: 2.6.1
     dev: false
-
-  /@types/downloadjs@1.4.3:
-    resolution: {integrity: sha512-MjJepFle/tLtT2/jmDNth6ZnwWzEhm40L+olE5HKR70ISUCfgT55eqreeHldAzFLY2HDUGsn8zgyto8KygN0CA==}
-    dev: true
 
   /@types/json5@0.0.29:
     resolution: {integrity: sha512-dRLjCWHYg4oaA77cxO64oO+7JwCwnIzkZPdrrC71jQmQtlhM556pwKo5bUzqvZndkVbeFLIIi+9TC40JNF5hNQ==}
@@ -952,10 +942,6 @@ packages:
     dependencies:
       esutils: 2.0.3
     dev: true
-
-  /downloadjs@1.4.7:
-    resolution: {integrity: sha512-LN1gO7+u9xjU5oEScGFKvXhYf7Y/empUIIEAGBs1LzUq/rg5duiDrkuH5A2lQGd5jfMOb9X9usDa2oVXwJ0U/Q==}
-    dev: false
 
   /electron-to-chromium@1.4.492:
     resolution: {integrity: sha512-36K9b/6skMVwAIEsC7GiQ8I8N3soCALVSHqWHzNDtGemAcI9Xu8hP02cywWM0A794rTHm0b0zHPeLJHtgFVamQ==}
