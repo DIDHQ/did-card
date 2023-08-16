@@ -47,11 +47,18 @@ export default forwardRef<
           fonts: fonts!.map((data) => ({ name: 'Inter', data })),
           loadAdditionalAsset: async (code: string, segment: string) => {
             if (code === 'emoji') {
-              const response = await fetch(
-                `https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/svg/${twemoji.convert.toCodePoint(
-                  segment,
-                )}.svg`,
+              const url = await new Promise<string>((resolve) =>
+                twemoji.parse(segment, {
+                  callback(icon, options) {
+                    console.log(icon, options)
+                    resolve(
+                      `https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/svg/${icon}.svg`,
+                    )
+                    return false
+                  },
+                }),
               )
+              const response = await fetch(url)
               const arrayBuffer = await response.arrayBuffer()
               return `data:image/svg+xml;base64,${Buffer.from(
                 arrayBuffer,
@@ -66,7 +73,7 @@ export default forwardRef<
     { revalidateOnFocus: false },
   )
   const { data: card, error } = useSWR(
-    fonts ? ['card', text, props.image, fonts] : null,
+    fonts && text ? ['card', text, props.image, fonts] : null,
     async () => {
       const svg = await satori(
         <div
