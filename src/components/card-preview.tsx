@@ -1,12 +1,18 @@
 import clsx from 'clsx'
-import dynamic from 'next/dynamic'
 import useSWRMutation from 'swr/mutation'
 import { wrap } from 'comlink'
 import useSWR from 'swr'
 import DidCard from './did-card'
 import { DownloadIcon, LoadingIcon } from './icon'
+import ParallaxStars from './parallax-stars'
 
-const ParallaxStars = dynamic(() => import('./parallax-stars'), { ssr: false })
+const generate = wrap<Function>(
+  new Worker(new URL('../workers/svg.tsx', import.meta.url)),
+)
+
+const convert = wrap<Function>(
+  new Worker(new URL('../workers/png.ts', import.meta.url)),
+)
 
 /**
  * @see https://fjolt.com/article/css-3d-interactive-flippable-cards
@@ -18,12 +24,7 @@ export default function CardPreview(props: {
 }) {
   const { data: svg } = useSWR(
     ['svg', props.did, props.image],
-    () => {
-      const generate = wrap<Function>(
-        new Worker(new URL('../workers/svg.tsx', import.meta.url)),
-      )
-      return generate.call(generate, props.did, props.image) as string
-    },
+    () => generate.call(generate, props.did, props.image) as string,
     { revalidateOnFocus: false },
   )
   const { trigger, isMutating } = useSWRMutation('download', async () => {
@@ -31,11 +32,7 @@ export default function CardPreview(props: {
       return
     }
 
-    const convert = wrap<Function>(
-      new Worker(new URL('../workers/png.ts', import.meta.url)),
-    )
     const href = await convert.call(convert, svg)
-
     const anchor = document.createElement('a')
     anchor.setAttribute('download', `${props.did}.png`)
     anchor.href = href

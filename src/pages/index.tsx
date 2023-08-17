@@ -1,7 +1,12 @@
 import { useEffect, useState } from 'react'
 import { Allotment } from 'allotment'
-import CardPreview from '@/components/card-preview'
+import dynamic from 'next/dynamic'
 import DIDSearch from '@/components/did-search'
+
+const CardPreview = dynamic(() => import('@/components/card-preview'), {
+  ssr: false,
+  loading: () => <div className="h-full w-full bg-gradient" />,
+})
 
 export default function IndexPage() {
   const [did, setDid] = useState('')
