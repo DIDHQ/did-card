@@ -1,20 +1,7 @@
-import {
-  createPublicClient,
-  getAddress,
-  http,
-  labelhash,
-  namehash,
-  parseAbi,
-} from 'viem'
+import { createPublicClient, http, labelhash, namehash, parseAbi } from 'viem'
 import { mainnet } from 'viem/chains'
 import { normalize } from 'viem/ens'
 import { compact, uniq } from 'remeda'
-
-export enum DidSystem {
-  BIT = 'BIT',
-  ENS = 'ENS',
-  LENS = 'LENS',
-}
 
 const publicClient = createPublicClient({
   chain: mainnet,
@@ -22,14 +9,27 @@ const publicClient = createPublicClient({
   batch: { multicall: true },
 })
 
-function guessDidSystem(did: string): DidSystem | null {
-  if (did.endsWith('.eth')) {
+export enum DidSystem {
+  BIT = 'BIT',
+  ENS = 'ENS',
+  LENS = 'LENS',
+}
+
+function normalizeAddress(address: string): string {
+  return address.toLowerCase()
+}
+
+function guessDidSystem(didOrAddress: string): DidSystem | null {
+  if (didOrAddress.endsWith('.eth')) {
     return DidSystem.ENS
   }
-  if (did.endsWith('.lens')) {
+  if (didOrAddress.endsWith('.lens')) {
     return DidSystem.LENS
   }
-  if (did.endsWith('.bit') || /^[^\s\.]+\.[^\s\.]+$/.test(did)) {
+  if (
+    didOrAddress.endsWith('.bit') ||
+    /^[^\s\.]+\.[^\s\.]+$/.test(didOrAddress)
+  ) {
     return DidSystem.BIT
   }
   return null
@@ -41,64 +41,98 @@ const abi = parseAbi([
 ])
 
 async function getEnsManager(did: string): Promise<string | null> {
-  const node = namehash(normalize(did))
   try {
-    return await publicClient.readContract({
+    const node = namehash(normalize(did))
+    const address = await publicClient.readContract({
       abi,
       address: '0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e',
       functionName: 'owner',
       args: [node],
     })
+    return normalizeAddress(address)
   } catch (err) {
-    console.error('getEnsManager', err)
+    console.error('getEnsManager', did, err)
     return null
   }
 }
 
 async function getEnsOwner(did: string): Promise<string | null> {
-  const label = labelhash(normalize(did.replace(/\.eth$/, '')))
   try {
-    return await publicClient.readContract({
+    const label = labelhash(normalize(did.replace(/\.eth$/, '')))
+    const address = await publicClient.readContract({
       abi,
       address: '0x57f1887a8BF19b14fC0dF6Fd9B2acc9Af147eA85',
       functionName: 'ownerOf',
       args: [BigInt(label)],
     })
+    return normalizeAddress(address)
   } catch (err) {
-    console.error('getEnsOwner', err)
+    console.error('getEnsOwner', did, err)
     return null
   }
 }
 
 async function getEnsAddress(did: string): Promise<string | null> {
-  return publicClient.getEnsAddress({ name: normalize(did) })
+  try {
+    const address = await publicClient.getEnsAddress({ name: normalize(did) })
+    return address ? normalizeAddress(address) : null
+  } catch (err) {
+    console.error('getEnsAddress', did, err)
+    return null
+  }
 }
 
 async function getBitAccountInfo(
   did: string,
 ): Promise<{ manager: string | null; owner: string | null }> {
-  const response = await fetch('https://indexer-v1.did.id/', {
-    body: JSON.stringify({
-      jsonrpc: '2.0',
-      id: 0,
-      method: 'das_accountInfo',
-      params: [{ account: did.endsWith('.bit') ? did : `${did}.bit` }],
-    }),
-    method: 'POST',
-  })
-  const json = (await response.json()) as {
-    result: {
-      data: {
-        account_info: { manager_key: string; owner_key: string }
-      } | null
+  try {
+    const response = await fetch('https://indexer-v1.did.id/', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({
+        jsonrpc: '2.0',
+        id: 0,
+        method: 'das_accountInfo',
+        params: [{ account: did.endsWith('.bit') ? did : `${did}.bit` }],
+      }),
+    })
+    const json = (await response.json()) as {
+      result: {
+        data: {
+          account_info: { manager_key: string; owner_key: string }
+        } | null
+      }
     }
-  }
-  if (!json.result.data) {
+    if (!json.result.data) {
+      return { manager: null, owner: null }
+    }
+    return {
+      manager: normalizeAddress(json.result.data.account_info.manager_key),
+      owner: normalizeAddress(json.result.data.account_info.owner_key),
+    }
+  } catch (err) {
+    console.error('getBitAccountInfo', did, err)
     return { manager: null, owner: null }
   }
-  return {
-    manager: json.result.data.account_info.manager_key,
-    owner: json.result.data.account_info.owner_key,
+}
+
+async function getBitAccountReverseAddresses(did: string): Promise<string[]> {
+  try {
+    const response = await fetch(
+      'https://indexer-v1.did.id/v1/account/reverse/address',
+      {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ account: did }),
+      },
+    )
+    const json = (await response.json()) as {
+      data: { list: { key_info: { key: string } }[] }
+    }
+    return json.data.list.map(({ key_info: { key } }) => normalizeAddress(key))
+  } catch (err) {
+    console.error('getBitAccountReverseAddresses', did, err)
+    return []
   }
 }
 
@@ -110,17 +144,16 @@ export async function getRelatedAddresses(did: string): Promise<string[]> {
       getEnsOwner(did),
       getEnsAddress(did),
     ])
-    return uniq(
-      compact([manager, owner, address]).map((address) => getAddress(address)),
-    )
+    return uniq(compact([manager, owner, address]))
   }
   if (didSystem === DidSystem.LENS) {
     const address = await getEnsAddress(`${did}.xyz`)
-    return compact([address]).map((address) => getAddress(address))
+    return compact([address])
   }
   if (didSystem === DidSystem.BIT) {
     const { manager, owner } = await getBitAccountInfo(did)
-    return uniq(compact([manager, owner]).map((address) => getAddress(address)))
+    const reverses = await getBitAccountReverseAddresses(did)
+    return uniq(compact([manager, owner, ...reverses]))
   }
   return []
 }
