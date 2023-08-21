@@ -2,7 +2,7 @@ import clsx from 'clsx'
 import useSWRMutation from 'swr/mutation'
 import { wrap } from 'comlink'
 import useSWR from 'swr'
-import { useRef } from 'react'
+import { useCallback, useRef } from 'react'
 import DidCard from './did-card'
 import { DownloadIcon, LoadingIcon, PrintIcon, UploadIcon } from './icon'
 import ParallaxStars from './parallax-stars'
@@ -25,6 +25,7 @@ export default function CardPreview(props: {
   onImageChange(did: string): void
   className?: string
 }) {
+  const { onDidChange, onImageChange } = props
   const { data: svg } = useSWR(
     ['svg', props.did, props.image],
     () => generate.call(generate, props.did, props.image) as string,
@@ -45,9 +46,35 @@ export default function CardPreview(props: {
 
     URL.revokeObjectURL(href)
   })
+  const handleFile = useCallback(
+    (file?: File) => {
+      if (!file) {
+        return
+      }
+      onDidChange(file.name.replace(/\.[^\.]+$/, ''))
+      const reader = new FileReader()
+      reader.onloadend = () => {
+        onImageChange(reader.result as string)
+      }
+      reader.readAsDataURL(file)
+    },
+    [onDidChange, onImageChange],
+  )
 
   return (
-    <div className={clsx('relative', props.className)}>
+    <div
+      onDragOver={(e) => {
+        e.preventDefault()
+      }}
+      onDragEnd={(e) => {
+        e.preventDefault()
+      }}
+      onDrop={(e) => {
+        e.preventDefault()
+        handleFile(e.nativeEvent.dataTransfer?.files[0])
+      }}
+      className={clsx('relative', props.className)}
+    >
       <ParallaxStars
         stars={100}
         speed={0.3}
@@ -70,18 +97,7 @@ export default function CardPreview(props: {
               ref={inputRef}
               type="file"
               accept="image/png,image/jpg,image/jpeg,image/gif"
-              onChange={(e) => {
-                const file = e.target.files?.[0]
-                if (!file) {
-                  return
-                }
-                props.onDidChange(file.name.replace(/\.[^\.]+$/, ''))
-                const reader = new FileReader()
-                reader.onloadend = () => {
-                  props.onImageChange(reader.result as string)
-                }
-                reader.readAsDataURL(file)
-              }}
+              onChange={(e) => handleFile(e.target.files?.[0])}
               className="hidden"
             />
             <UploadIcon className="h-8 w-8 text-gray-800" />
