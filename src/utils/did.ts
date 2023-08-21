@@ -127,9 +127,12 @@ async function getBitAccountReverseAddresses(did: string): Promise<string[]> {
       },
     )
     const json = (await response.json()) as {
-      data: { list: { key_info: { key: string } }[] }
+      data: { list: { key_info: { key: string } }[] } | null
     }
-    return json.data.list.map(({ key_info: { key } }) => normalizeAddress(key))
+    return (
+      json.data?.list.map(({ key_info: { key } }) => normalizeAddress(key)) ??
+      []
+    )
   } catch (err) {
     console.error('getBitAccountReverseAddresses', did, err)
     return []
