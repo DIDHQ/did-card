@@ -24,7 +24,13 @@ export default function IndexPage() {
         setImage={setImage}
         className="h-full w-full"
       />
-      <CardPreview did={did} image={image} className="h-full w-full" />
+      <CardPreview
+        did={did}
+        image={image}
+        onDidChange={setDid}
+        onImageChange={setImage}
+        className="h-full w-full"
+      />
     </Allotment>
   )
 }

@@ -2,8 +2,9 @@ import clsx from 'clsx'
 import useSWRMutation from 'swr/mutation'
 import { wrap } from 'comlink'
 import useSWR from 'swr'
+import { useRef } from 'react'
 import DidCard from './did-card'
-import { DownloadIcon, LoadingIcon } from './icon'
+import { DownloadIcon, LoadingIcon, PrintIcon, UploadIcon } from './icon'
 import ParallaxStars from './parallax-stars'
 
 const generate = wrap<Function>(
@@ -20,6 +21,8 @@ const convert = wrap<Function>(
 export default function CardPreview(props: {
   did: string
   image: string
+  onDidChange(did: string): void
+  onImageChange(did: string): void
   className?: string
 }) {
   const { data: svg } = useSWR(
@@ -27,6 +30,7 @@ export default function CardPreview(props: {
     () => generate.call(generate, props.did, props.image) as string,
     { revalidateOnFocus: false },
   )
+  const inputRef = useRef<HTMLInputElement>(null)
   const { trigger, isMutating } = useSWRMutation('download', async () => {
     if (!svg) {
       return
@@ -57,17 +61,49 @@ export default function CardPreview(props: {
         )}
       >
         <DidCard svg={svg} />
-        <button
-          disabled={isMutating}
-          onClick={() => trigger()}
-          className="mt-16 rounded-full bg-white p-2 font-semibold leading-4 shadow-2xl transition-colors hover:bg-gray-200 disabled:cursor-wait"
-        >
-          {isMutating ? (
-            <LoadingIcon className="h-8 w-8 text-gray-400" />
-          ) : (
-            <DownloadIcon className="h-8 w-8 text-gray-800" />
-          )}
-        </button>
+        <div className="flex gap-8">
+          <button
+            onClick={() => inputRef.current?.click()}
+            className="mt-16 rounded-full bg-white p-2 font-semibold leading-4 shadow-2xl transition-colors hover:bg-gray-300 disabled:cursor-wait"
+          >
+            <input
+              ref={inputRef}
+              type="file"
+              accept="image/png,image/jpg,image/jpeg,image/gif"
+              onChange={(e) => {
+                const file = e.target.files?.[0]
+                if (!file) {
+                  return
+                }
+                props.onDidChange(file.name.replace(/\.[^\.]+$/, ''))
+                const reader = new FileReader()
+                reader.onloadend = () => {
+                  props.onImageChange(reader.result as string)
+                }
+                reader.readAsDataURL(file)
+              }}
+              className="hidden"
+            />
+            <UploadIcon className="h-8 w-8 text-gray-800" />
+          </button>
+          <button
+            disabled={isMutating}
+            onClick={() => trigger()}
+            className="mt-16 rounded-full bg-white p-2 font-semibold leading-4 shadow-2xl transition-colors hover:bg-gray-300 disabled:cursor-wait"
+          >
+            {isMutating ? (
+              <LoadingIcon className="h-8 w-8 text-gray-400" />
+            ) : (
+              <DownloadIcon className="h-8 w-8 text-gray-800" />
+            )}
+          </button>
+          {/* <button
+            onClick={() => {}}
+            className="mt-16 rounded-full bg-white p-2 font-semibold leading-4 shadow-2xl transition-colors hover:bg-gray-300 disabled:cursor-wait"
+          >
+            <PrintIcon className="h-8 w-8 text-gray-800" />
+          </button> */}
+        </div>
       </div>
     </div>
   )
