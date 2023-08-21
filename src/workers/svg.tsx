@@ -25,7 +25,7 @@ export async function generate(did?: string, image?: string) {
       style={{
         flexShrink: 0,
         fontSize: 256,
-        lineHeight: 1,
+        lineHeight: 1.5,
         fontWeight: 600,
         color: 'white',
       }}
@@ -33,7 +33,7 @@ export async function generate(did?: string, image?: string) {
       {did || '???'}
     </div>,
     {
-      height: 256,
+      height: 384,
       fonts: fonts!.map((data) => ({ name: 'Inter', data })),
       loadAdditionalAsset: async (code: string, segment: string) => {
         if (code === 'emoji') {
@@ -70,7 +70,12 @@ export async function generate(did?: string, image?: string) {
         <img
           src={image}
           alt="nft"
-          style={{ height: 1988, width: 1988, flexShrink: 0 }}
+          style={{
+            height: 1988,
+            width: 1988,
+            flexShrink: 0,
+            objectFit: 'cover',
+          }}
         />
       ) : (
         <div
@@ -108,7 +113,7 @@ export async function generate(did?: string, image?: string) {
             lineHeight: 1,
             fontWeight: 500,
             color: '#58595b',
-            marginBottom: 135,
+            marginBottom: 71,
           }}
         >
           I AM
@@ -116,7 +121,7 @@ export async function generate(did?: string, image?: string) {
         <img
           src={svgToMiniDataURI(text)}
           alt="did"
-          style={{ height: 256, maxWidth: 1688, objectFit: 'contain' }}
+          style={{ height: 384, maxWidth: 1688, objectFit: 'contain' }}
         />
         <div style={{ flex: 1, height: 0 }} />
         <div
