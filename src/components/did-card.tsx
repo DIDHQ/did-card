@@ -1,15 +1,21 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import svgToMiniDataURI from 'mini-svg-data-uri'
 import clsx from 'clsx'
+import { useAtom } from 'jotai'
 import { LoadingIcon } from './icon'
+import { flippedAtom } from '@/utils/atom'
 
-export default function DidCard(props: { svg?: string; className?: string }) {
+export default function DidCard(props: {
+  front?: string
+  back?: string
+  className?: string
+}) {
   const cardRef = useRef<HTMLDivElement>(null)
   const cardBackFaceRef = useRef<HTMLDivElement>(null)
   const glareRef = useRef<HTMLDivElement>(null)
   const cardFrontFaceRef = useRef<HTMLDivElement>(null)
   const [animated, setAnimated] = useState(false)
-  const [flipped, setFlipped] = useState(false)
+  const [flipped, setFlipped] = useAtom(flippedAtom)
   const calculateAngle = useCallback((e: MouseEvent, flipped: boolean) => {
     const front = cardFrontFaceRef.current
     const back = cardBackFaceRef.current
@@ -91,10 +97,14 @@ export default function DidCard(props: { svg?: string; className?: string }) {
   }, [calculateAngle, flipped, resetAngel])
   useEffect(() => {
     setFlipped(false)
-  }, [props.svg])
-  const backgroundImage = useMemo(
-    () => (props.svg ? `url("${svgToMiniDataURI(props.svg)}")` : undefined),
-    [props.svg],
+  }, [props.front, setFlipped])
+  const frontImage = useMemo(
+    () => (props.front ? `url("${svgToMiniDataURI(props.front)}")` : undefined),
+    [props.front],
+  )
+  const backImage = useMemo(
+    () => (props.back ? svgToMiniDataURI(props.back) : undefined),
+    [props.back],
   )
 
   return (
@@ -125,11 +135,8 @@ export default function DidCard(props: { svg?: string; className?: string }) {
         }}
         className="absolute inset-0 h-full w-full overflow-hidden rounded-[12.5pt] transition-all duration-150 ease-out"
       >
-        <div
-          style={{ transform: 'rotateY(180deg)' }}
-          className="absolute bottom-10 mx-auto w-full select-none text-center text-white"
-        >
-          d.id
+        <div style={{ transform: 'rotateY(180deg)' }} className="h-full w-full">
+          <img src={backImage} alt="back" className="h-full w-full" />
         </div>
       </div>
 
@@ -140,11 +147,11 @@ export default function DidCard(props: { svg?: string; className?: string }) {
           transform: 'rotateX(0deg) rotateY(0deg) scale(1)',
           filter: 'drop-shadow(0 15px 15px rgba(0,0,0,0.3))',
           willChange: 'transform, filter',
-          backgroundImage,
+          backgroundImage: frontImage,
         }}
         className="h-full w-full overflow-hidden rounded-[12.5pt] bg-black bg-cover object-cover transition-all duration-150 ease-out"
       >
-        {backgroundImage ? (
+        {frontImage ? (
           <div
             ref={glareRef}
             style={{

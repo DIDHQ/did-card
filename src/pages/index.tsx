@@ -3,9 +3,13 @@ import { Allotment } from 'allotment'
 import dynamic from 'next/dynamic'
 import useSWR from 'swr'
 import { wrap } from 'comlink'
+import { useRouter } from 'next/router'
+import { useAtomValue } from 'jotai'
 import DIDSearch from '@/components/did-search'
-import type { generate } from '@/workers/svg'
-import type { convert } from '@/workers/png'
+import type { generateFront } from '@/workers/front'
+import type { generateBack } from '@/workers/back'
+import type { convertToPng } from '@/workers/png'
+import { flippedAtom } from '@/utils/atom'
 
 const CardPreview = dynamic(() => import('@/components/card-preview'), {
   ssr: false,
@@ -21,34 +25,54 @@ export default function IndexPage() {
     }
   }, [did])
 
-  const generateRef = useRef<typeof generate>()
-  const convertRef = useRef<typeof convert>()
+  const frontRef = useRef<typeof generateFront>()
+  const backRef = useRef<typeof generateBack>()
+  const pngRef = useRef<typeof convertToPng>()
   useEffect(() => {
-    generateRef.current = wrap<typeof generate>(
-      new Worker(new URL('../workers/svg.tsx', import.meta.url)),
+    frontRef.current = wrap<typeof generateFront>(
+      new Worker(new URL('../workers/front.tsx', import.meta.url)),
     )
-    convertRef.current = wrap<typeof convert>(
+    backRef.current = wrap<typeof generateBack>(
+      new Worker(new URL('../workers/back.tsx', import.meta.url)),
+    )
+    pngRef.current = wrap<typeof convertToPng>(
       new Worker(new URL('../workers/png.ts', import.meta.url)),
     )
   }, [])
 
-  const { data: svg } = useSWR(
-    ['svg', did, image],
+  const router = useRouter()
+  const offset =
+    typeof router.query.offset === 'string' ? parseInt(router.query.offset) : 0
+
+  const { data: front } = useSWR(
+    ['front', did, image],
     () => {
-      if (!generateRef.current) {
+      if (!frontRef.current) {
         throw new Error()
       }
-      return generateRef.current.call(generateRef.current, did, image)
+      return frontRef.current.call(frontRef.current, did, image)
     },
     { revalidateOnFocus: false, errorRetryInterval: 1000 },
   )
+  const { data: back } = useSWR(
+    ['back', offset],
+    () => {
+      if (!backRef.current) {
+        throw new Error()
+      }
+      return backRef.current.call(backRef.current, offset)
+    },
+    { revalidateOnFocus: false, errorRetryInterval: 1000 },
+  )
+  const flipped = useAtomValue(flippedAtom)
+  const svg = flipped ? back : front
   const { data: png } = useSWR(
     svg ? ['png', svg] : null,
     () => {
-      if (!convertRef.current) {
+      if (!pngRef.current) {
         throw new Error()
       }
-      return convertRef.current.call(convertRef.current, svg!)
+      return pngRef.current.call(pngRef.current, svg!)
     },
     { revalidateOnFocus: false, errorRetryInterval: 1000 },
   )
@@ -64,7 +88,8 @@ export default function IndexPage() {
         <CardPreview
           did={did}
           image={image}
-          svg={svg}
+          front={front}
+          back={back}
           png={png}
           onDidChange={setDid}
           onImageChange={setImage}

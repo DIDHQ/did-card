@@ -10,7 +10,7 @@ const nfc = svgToMiniDataURI(
 
 let initialized = false
 
-export async function generate(did?: string, image?: string) {
+export async function generateFront(did?: string, image?: string) {
   if (!initialized) {
     const wasm = await fetch(
       new URL('yoga-wasm-web/dist/yoga.wasm', import.meta.url),
@@ -159,4 +159,4 @@ export async function generate(did?: string, image?: string) {
   return svg
 }
 
-expose(generate)
+expose(generateFront)

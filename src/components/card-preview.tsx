@@ -1,9 +1,11 @@
 import clsx from 'clsx'
 import useSWRMutation from 'swr/mutation'
 import { useCallback, useRef } from 'react'
+import { useAtomValue } from 'jotai'
 import DidCard from './did-card'
 import { DownloadIcon, LoadingIcon, PrintIcon, UploadIcon } from './icon'
 import ParallaxStars from './parallax-stars'
+import { flippedAtom } from '@/utils/atom'
 
 /**
  * @see https://fjolt.com/article/css-3d-interactive-flippable-cards
@@ -11,14 +13,16 @@ import ParallaxStars from './parallax-stars'
 export default function CardPreview(props: {
   did: string
   image: string
-  svg?: string
+  front?: string
+  back?: string
   png?: string
   onDidChange(did: string): void
   onImageChange(did: string): void
   className?: string
 }) {
-  const { svg, png, onDidChange, onImageChange } = props
+  const { front, back, png, onDidChange, onImageChange } = props
 
+  const flipped = useAtomValue(flippedAtom)
   const inputRef = useRef<HTMLInputElement>(null)
   const { trigger: download, isMutating: isDownloading } = useSWRMutation(
     'download',
@@ -28,7 +32,7 @@ export default function CardPreview(props: {
       }
 
       const anchor = document.createElement('a')
-      anchor.setAttribute('download', `${props.did}.png`)
+      anchor.setAttribute('download', flipped ? 'back.png' : `${props.did}.png`)
       anchor.href = png
       anchor.setAttribute('target', '_blank')
       anchor.click()
@@ -78,7 +82,7 @@ export default function CardPreview(props: {
           props.className,
         )}
       >
-        <DidCard svg={svg} />
+        <DidCard front={front} back={back} />
         <div className="flex gap-8">
           <button
             onClick={() => inputRef.current?.click()}

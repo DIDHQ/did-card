@@ -3,7 +3,7 @@ import { Resvg, initWasm } from '@resvg/resvg-wasm'
 
 let initialized = false
 
-export async function convert(svg: string) {
+export async function convertToPng(svg: string) {
   if (!initialized) {
     await initWasm(
       fetch(new URL('@resvg/resvg-wasm/index_bg.wasm', import.meta.url)),
@@ -17,4 +17,4 @@ export async function convert(svg: string) {
   return URL.createObjectURL(blob)
 }
 
-expose(convert)
+expose(convertToPng)
