@@ -4,7 +4,7 @@ import initYoga from 'yoga-wasm-web'
 
 let initialized = false
 
-export async function generateBack() {
+export async function generateBack(offset: number) {
   if (!initialized) {
     const wasm = await fetch(
       new URL('yoga-wasm-web/dist/yoga.wasm', import.meta.url),
@@ -15,7 +15,7 @@ export async function generateBack() {
   }
 
   const fonts = await Promise.all(
-    ['/Inter-SemiBold.woff'].map(async (url) => {
+    ['/Inter-SemiBold.woff', '/Inter-Medium.woff'].map(async (url) => {
       const response = await fetch(url)
       return response.arrayBuffer()
     }),
@@ -31,7 +31,9 @@ export async function generateBack() {
         backgroundColor: 'black',
       }}
     >
-      <div style={{ color: 'white', fontSize: 128, marginTop: 1900 }}>d.id</div>
+      <div style={{ color: 'white', fontSize: 128, marginTop: 2400 + offset }}>
+        d.id
+      </div>
     </div>,
     {
       width: 1988,
