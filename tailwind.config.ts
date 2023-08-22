@@ -8,6 +8,9 @@ const config: Config = {
         gradient:
           'radial-gradient(ellipse at bottom, #1B2735 0%, #090A0F 100%)',
       },
+      screens: {
+        print: { raw: 'print' },
+      },
     },
   },
   plugins: [],
