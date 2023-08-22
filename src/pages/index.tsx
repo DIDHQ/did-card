@@ -43,6 +43,12 @@ export default function IndexPage() {
   const router = useRouter()
   const offset =
     typeof router.query.offset === 'string' ? parseInt(router.query.offset) : 0
+  const size =
+    typeof router.query.size === 'string' ? parseInt(router.query.size) : 128
+  const weight =
+    typeof router.query.weight === 'string'
+      ? parseInt(router.query.weight)
+      : 500
 
   const { data: front } = useSWR(
     ['front', did, image],
@@ -60,7 +66,7 @@ export default function IndexPage() {
       if (!backRef.current) {
         throw new Error()
       }
-      return backRef.current.call(backRef.current, offset)
+      return backRef.current.call(backRef.current, offset, size, weight)
     },
     { revalidateOnFocus: false, errorRetryInterval: 1000 },
   )
