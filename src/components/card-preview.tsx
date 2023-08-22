@@ -81,16 +81,16 @@ export default function CardPreview(props: {
           URL.revokeObjectURL(href)
         }
         image.src = href
-        image.style.width = '221pt'
-        image.style.height = '345pt'
+        image.style.width = '5.6cm'
+        image.style.height = '8.8cm'
         image.style.objectFit = 'cover'
         image.style.transform =
-          'rotate(90deg) translateX(-62pt) translateY(-62pt)'
+          'rotate(90deg) translateX(-1.6cm) translateY(-1.6cm)'
         iframe.contentDocument?.body.appendChild(image)
       }
       iframe.setAttribute(
         'srcdoc',
-        `<html><body style="margin: 0;"></body></html>`,
+        `<html style="margin: 0; overflow: hidden;"><body style="margin: 0; overflow: hidden;"></body></html>`,
       )
     },
   )
@@ -163,7 +163,7 @@ export default function CardPreview(props: {
         </div>
       </div>
       {createPortal(
-        <iframe ref={iframeRef} className="hidden h-[221pt] w-[345pt]" />,
+        <iframe ref={iframeRef} className="hidden h-[5.6cm] w-[8.8cm]" />,
         document.body,
       )}
     </>
