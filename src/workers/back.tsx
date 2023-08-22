@@ -31,7 +31,7 @@ export async function generateBack(offset: number) {
         backgroundColor: 'black',
       }}
     >
-      <div style={{ color: 'white', fontSize: 128, marginTop: 2400 + offset }}>
+      <div style={{ color: 'white', fontSize: 128, marginTop: 1900 + offset }}>
         d.id
       </div>
     </div>,
