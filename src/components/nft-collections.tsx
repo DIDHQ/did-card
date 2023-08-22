@@ -13,7 +13,7 @@ export default function NftCollections(props: {
       components={{
         Header: () => (
           <div>
-            <div className="flex h-16 items-center justify-between bg-gray-50 px-6 font-semibold">
+            <div className="flex h-16 items-center justify-between bg-gray-100 px-6 font-semibold">
               <span className="text-gray-800">Default</span>
               <span className="text-gray-400">1</span>
             </div>
@@ -32,7 +32,7 @@ export default function NftCollections(props: {
       }}
       groupCounts={props.collections?.map(() => 1) ?? []}
       groupContent={(index) => (
-        <div className="flex h-16 items-center justify-between bg-gray-50 px-6 font-semibold">
+        <div className="flex h-16 items-center justify-between bg-gray-100 px-6 font-semibold">
           <span className="text-gray-800">
             {props.collections?.[index]?.name}
           </span>
