@@ -41,6 +41,7 @@ export default function CardPreview(props: {
       if (!file) {
         return
       }
+
       onDidChange(file.name.replace(/\.[^\.]+$/, ''))
       const reader = new FileReader()
       reader.onloadend = () => {
@@ -93,7 +94,7 @@ export default function CardPreview(props: {
             <UploadIcon className="h-8 w-8 text-gray-800" />
           </button>
           <button
-            disabled={isDownloading}
+            disabled={!png || isDownloading}
             onClick={() => download()}
             className="mt-16 rounded-full bg-white p-2 font-semibold leading-4 shadow-2xl transition-colors hover:bg-gray-300 disabled:cursor-wait"
           >
