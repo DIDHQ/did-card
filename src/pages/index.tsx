@@ -3,7 +3,6 @@ import { Allotment } from 'allotment'
 import dynamic from 'next/dynamic'
 import useSWR from 'swr'
 import { wrap } from 'comlink'
-import { useRouter } from 'next/router'
 import { useAtomValue } from 'jotai'
 import DIDSearch from '@/components/did-search'
 import type { generateFront } from '@/workers/front'
@@ -40,10 +39,6 @@ export default function IndexPage() {
     )
   }, [])
 
-  const router = useRouter()
-  const offset =
-    typeof router.query.offset === 'string' ? parseInt(router.query.offset) : 0
-
   const { data: front } = useSWR(
     ['front', did, image],
     () => {
@@ -55,12 +50,12 @@ export default function IndexPage() {
     { revalidateOnFocus: false, errorRetryInterval: 1000 },
   )
   const { data: back } = useSWR(
-    ['back', offset],
+    ['back'],
     () => {
       if (!backRef.current) {
         throw new Error()
       }
-      return backRef.current.call(backRef.current, offset)
+      return backRef.current.call(backRef.current)
     },
     { revalidateOnFocus: false, errorRetryInterval: 1000 },
   )
