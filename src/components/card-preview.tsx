@@ -81,6 +81,11 @@ export default function CardPreview(props: {
           URL.revokeObjectURL(href)
         }
         image.src = href
+        image.style.width = '221pt'
+        image.style.height = '345pt'
+        image.style.objectFit = 'cover'
+        image.style.transform =
+          'rotate(90deg) translateX(-62pt) translateY(-62pt)'
         iframe.contentDocument?.body.appendChild(image)
       }
       iframe.setAttribute(
@@ -158,12 +163,7 @@ export default function CardPreview(props: {
         </div>
       </div>
       {createPortal(
-        <iframe
-          ref={iframeRef}
-          width={1988}
-          height={3108}
-          className="hidden"
-        />,
+        <iframe ref={iframeRef} className="hidden h-[221pt] w-[345pt]" />,
         document.body,
       )}
     </>
