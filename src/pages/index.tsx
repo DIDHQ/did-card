@@ -40,7 +40,7 @@ export default function IndexPage() {
       }
       return generateRef.current.call(generateRef.current, did, image)
     },
-    { revalidateOnFocus: false },
+    { revalidateOnFocus: false, errorRetryInterval: 1000 },
   )
   const { data: png } = useSWR(
     svg ? ['png', svg] : null,
@@ -50,7 +50,7 @@ export default function IndexPage() {
       }
       return convertRef.current.call(convertRef.current, svg!)
     },
-    { revalidateOnFocus: false },
+    { revalidateOnFocus: false, errorRetryInterval: 1000 },
   )
 
   return (
