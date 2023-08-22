@@ -1,5 +1,6 @@
 import useSWR from 'swr'
 import { pipe, sortBy, values, map, sumBy } from 'remeda'
+import { isAddress } from 'viem'
 import { fetchJSON } from '@/utils/fetch'
 
 export type Collection = {
@@ -15,7 +16,7 @@ export function useCollections(addresses?: string[]) {
     addresses?.length ? ['collections', addresses] : null,
     async () => {
       const collections = await Promise.all(
-        addresses!.map(async (address) => {
+        addresses!.filter(isAddress).map(async (address) => {
           try {
             const json = await fetchJSON<{
               collections: {
@@ -74,24 +75,29 @@ export type Token = {
   image?: string
 }
 
-export function useTokens(addresses: string[], collection: string) {
+export function useTokens(addresses?: string[], collection?: string) {
   return useSWR<Token[]>(
-    addresses.length ? ['tokens', addresses, collection] : null,
+    addresses?.length && collection ? ['tokens', addresses, collection] : null,
     async () => {
       const nfts = await Promise.all(
-        addresses.map(async (address) => {
-          const json = await fetchJSON<{
-            tokens: {
-              token: { contract: string; tokenId: string; image?: string }
-            }[]
-          }>(
-            `https://api.reservoir.tools/users/${address}/tokens/v7?sortBy=lastAppraisalValue&limit=200&collection=${collection}`,
-          )
-          return json.tokens.map(({ token }) => ({
-            contract: token.contract,
-            token: token.tokenId,
-            image: token.image,
-          }))
+        addresses!.filter(isAddress).map(async (address) => {
+          try {
+            const json = await fetchJSON<{
+              tokens: {
+                token: { contract: string; tokenId: string; image?: string }
+              }[]
+            }>(
+              `https://api.reservoir.tools/users/${address}/tokens/v7?sortBy=lastAppraisalValue&limit=200&collection=${collection}`,
+            )
+            return json.tokens.map(({ token }) => ({
+              contract: token.contract,
+              token: token.tokenId,
+              image: token.image,
+            }))
+          } catch (err) {
+            console.error(err)
+            return []
+          }
         }),
       )
       return nfts.flatMap((tokens) => tokens)

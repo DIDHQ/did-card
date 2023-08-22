@@ -32,12 +32,12 @@ export default function DIDSearch(props: {
           className="flex-1 bg-transparent p-6 text-4xl font-bold leading-normal text-gray-800 outline-none placeholder:text-gray-400"
         />
       </div>
-      {addresses && collections ? (
+      {did ? (
         <NftCollections
           addresses={addresses}
           collections={collections}
-          onSelect={(token) => {
-            props.setImage(token.image!)
+          onSelect={(image) => {
+            props.setImage(image)
             props.setDid(did)
           }}
           className="h-0 flex-1"
