@@ -16,20 +16,25 @@ export function useCollections(addresses?: string[]) {
     async () => {
       const collections = await Promise.all(
         addresses!.map(async (address) => {
-          const json = await fetchJSON<{
-            collections: {
-              collection: {
-                id: string
-                name: string
-                image?: string
-                volume: { allTime: number }
-              }
-              ownership: { tokenCount: string }
-            }[]
-          }>(
-            `https://api.reservoir.tools/users/${address}/collections/v3?limit=100`,
-          )
-          return json.collections.filter(({ collection }) => collection.image)
+          try {
+            const json = await fetchJSON<{
+              collections: {
+                collection: {
+                  id: string
+                  name: string
+                  image?: string
+                  volume: { allTime: number }
+                }
+                ownership: { tokenCount: string }
+              }[]
+            }>(
+              `https://api.reservoir.tools/users/${address}/collections/v3?limit=100`,
+            )
+            return json.collections.filter(({ collection }) => collection.image)
+          } catch (err) {
+            console.error(err)
+            return []
+          }
         }),
       )
 
