@@ -19,6 +19,10 @@ function normalizeAddress(address: string): string {
   return address.toLowerCase()
 }
 
+const ensNameWrapper = normalizeAddress(
+  '0xD4416b13d2b3a9aBae7AcD5D6C2BbDBE25686401',
+)
+
 function guessDidSystem(didOrAddress: string): DidSystem | null {
   if (didOrAddress.endsWith('.eth')) {
     return DidSystem.ENS
@@ -147,7 +151,9 @@ export async function getRelatedAddresses(did: string): Promise<string[]> {
       getEnsOwner(did),
       getEnsAddress(did),
     ])
-    return uniq(compact([manager, owner, address]))
+    return uniq(compact([manager, owner, address])).filter(
+      (address) => address !== ensNameWrapper,
+    )
   }
   if (didSystem === DidSystem.LENS) {
     const address = await getEnsAddress(`${did}.xyz`)
