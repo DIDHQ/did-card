@@ -140,32 +140,21 @@ export async function generateFront(did?: string, image?: string) {
             display: 'flex',
             width: '100%',
             justifyContent: 'space-between',
+            paddingLeft: 128,
+            paddingRight: 128,
           }}
         >
           <img
             src={logo}
             alt="logo"
-            style={{
-              height: 120,
-              width: 120,
-              marginLeft: 96,
-              objectFit: 'cover',
-            }}
+            style={{ height: 120, width: 120, objectFit: 'cover' }}
           />
-          <img
-            src={nfc}
-            alt="nfc"
-            style={{
-              height: 120,
-              width: 120,
-              marginRight: 96,
-            }}
-          />
+          <img src={nfc} alt="nfc" style={{ height: 120, width: 120 }} />
         </div>
       </div>
     </div>,
     {
-      width: 1988,
+      width: 1960,
       height: 3108,
       fonts: fonts!.map((data) => ({ name: 'Inter', data })),
     },
