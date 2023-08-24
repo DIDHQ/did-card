@@ -36,8 +36,6 @@ export default function CardPreview(props: {
       anchor.href = png
       anchor.setAttribute('target', '_blank')
       anchor.click()
-
-      URL.revokeObjectURL(png)
     },
   )
   const handleFile = useCallback(
