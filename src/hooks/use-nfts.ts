@@ -87,23 +87,18 @@ export function useTokens(addresses?: string[], collection?: string) {
         uniq(addresses!)
           .filter(isAddress)
           .map(async (address) => {
-            try {
-              const json = await fetchJSON<{
-                tokens: {
-                  token: { contract: string; tokenId: string; image?: string }
-                }[]
-              }>(
-                `https://api.reservoir.tools/users/${address}/tokens/v7?sortBy=lastAppraisalValue&limit=200&collection=${collection}`,
-              )
-              return json.tokens.map(({ token }) => ({
-                contract: token.contract,
-                token: token.tokenId,
-                image: token.image,
-              }))
-            } catch (err) {
-              console.error(err)
-              return []
-            }
+            const json = await fetchJSON<{
+              tokens: {
+                token: { contract: string; tokenId: string; image?: string }
+              }[]
+            }>(
+              `https://api.reservoir.tools/users/${address}/tokens/v7?limit=200&collection=${collection}`,
+            )
+            return json.tokens.map(({ token }) => ({
+              contract: token.contract,
+              token: token.tokenId,
+              image: token.image,
+            }))
           }),
       )
       return nfts.flatMap((tokens) => tokens)
