@@ -11,28 +11,28 @@
   },
   "dependencies": {
     "@resvg/resvg-wasm": "^2.4.1",
-    "@uidotdev/usehooks": "^2.1.0",
-    "allotment": "^1.19.2",
+    "@uidotdev/usehooks": "^2.1.1",
+    "allotment": "^1.19.3",
     "clsx": "^2.0.0",
     "comlink": "^4.4.1",
-    "jotai": "^2.3.1",
+    "jotai": "^2.4.0",
     "mini-svg-data-uri": "^1.4.4",
     "next": "^13.4.19",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-lazy-load-image-component": "^1.6.0",
     "react-virtuoso": "^4.5.0",
-    "remeda": "^1.24.1",
+    "remeda": "^1.25.2",
     "satori": "^0.10.3",
     "swr": "^2.2.1",
     "tailwindcss": "^3.3.3",
     "twemoji": "^14.0.2",
-    "viem": "^1.6.4",
+    "viem": "^1.7.0",
     "yoga-wasm-web": "^0.3.3"
   },
   "devDependencies": {
-    "@types/node": "^20.5.1",
-    "@types/react": "^18.2.20",
+    "@types/node": "^20.5.6",
+    "@types/react": "^18.2.21",
     "@types/react-dom": "^18.2.7",
     "@types/react-lazy-load-image-component": "^1.5.3",
     "@types/twemoji": "^13.1.2",
@@ -44,6 +44,6 @@
     "postcss": "^8.4.28",
     "prettier": "^3.0.2",
     "prettier-plugin-tailwindcss": "^0.5.3",
-    "typescript": "^5.1.6"
+    "typescript": "^5.2.2"
   }
 }
