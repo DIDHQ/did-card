@@ -50,9 +50,10 @@ export default async function handler(req: NextRequest) {
           'ethereum.0xb47e3cd837ddf8e4c57f05d70ab865de6e193bbb'
             ? Infinity
             : (collection.top_bids?.[0]?.value ?? 0) *
-              (collection.top_bids?.[0]?.payment_token.symbol === 'ETH' ||
-              collection.top_bids?.[0]?.payment_token.symbol === 'WETH'
+              (collection.top_bids?.[0]?.payment_token.symbol.endsWith('ETH')
                 ? 1000
+                : collection.top_bids?.[0]?.payment_token.symbol.endsWith('BNB')
+                ? 100
                 : 1),
         'desc',
       ],

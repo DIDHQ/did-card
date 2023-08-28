@@ -17,7 +17,9 @@ export default function DIDSearch(props: {
   const { data: collections, isLoading: isCollectionsLoading } = useSWR(
     addresses?.length ? ['nft', addresses] : null,
     async () => {
-      const response = await fetch(`/api/nft?addresses=${addresses?.join(',')}`)
+      const response = await fetch(
+        `/api/nft/list?addresses=${addresses?.join(',')}`,
+      )
       return (await response.json()) as Collection[]
     },
     { revalidateOnFocus: false },
