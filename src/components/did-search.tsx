@@ -1,9 +1,10 @@
 import { useState } from 'react'
 import clsx from 'clsx'
+import useSWR from 'swr'
 import NftCollections from './nft-collections'
 import { LoadingIcon, SearchIcon } from './icon'
 import useRelatedAddresses from '@/hooks/use-related-addresses'
-import { useCollections } from '@/hooks/use-nfts'
+import { Collection } from '@/utils/type'
 
 export default function DIDSearch(props: {
   setDid: (did: string) => void
@@ -13,8 +14,14 @@ export default function DIDSearch(props: {
   const [did, setDid] = useState('')
   const { data: addresses, isLoading: isAddressesLoading } =
     useRelatedAddresses(did)
-  const { data: collections, isLoading: isCollectionsLoading } =
-    useCollections(addresses)
+  const { data: collections, isLoading: isCollectionsLoading } = useSWR(
+    addresses?.length ? ['nft', addresses] : null,
+    async () => {
+      const response = await fetch(`/api/nft?addresses=${addresses?.join(',')}`)
+      return (await response.json()) as Collection[]
+    },
+    { revalidateOnFocus: false },
+  )
 
   return (
     <div className={clsx('flex h-full flex-col', props.className)}>
@@ -34,7 +41,6 @@ export default function DIDSearch(props: {
       </div>
       {did ? (
         <NftCollections
-          addresses={addresses}
           collections={collections}
           onSelect={(image) => {
             props.setImage(image)

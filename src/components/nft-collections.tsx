@@ -1,9 +1,8 @@
 import { GroupedVirtuoso } from 'react-virtuoso'
-import NftTokens from './nft-tokens'
-import { Collection } from '@/hooks/use-nfts'
+import NftToken from './nft-token'
+import { Collection } from '@/utils/type'
 
 export default function NftCollections(props: {
-  addresses?: string[]
   collections?: Collection[]
   onSelect(image: string): void
   className?: string
@@ -37,17 +36,21 @@ export default function NftCollections(props: {
             {props.collections?.[index]?.name}
           </span>
           <span className="text-gray-400">
-            {props.collections?.[index]?.tokenCount}
+            {props.collections?.[index]?.distinct_nfts_owned}
           </span>
         </div>
       )}
       itemContent={(index) => (
-        <NftTokens
-          addresses={props.addresses}
-          collection={props.collections?.[index]}
-          onSelect={props.onSelect}
-          className="p-6"
-        />
+        <div className="flex flex-wrap gap-6 p-6">
+          {props.collections?.[index]?.nft_ids.map((nftId) => (
+            <NftToken
+              key={nftId}
+              nftId={nftId}
+              onSelect={props.onSelect}
+              className="p-6"
+            />
+          ))}
+        </div>
       )}
       className={props.className}
     />
