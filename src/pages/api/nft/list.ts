@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { sortBy } from 'remeda'
 import { isAddress } from 'viem'
-import { chains } from '@/utils/constant'
+import { supportedChains } from '@/utils/chain'
 import { Collection } from '@/utils/type'
 import { fetchJSON } from '@/utils/fetch'
 
@@ -29,11 +29,9 @@ async function simpleHash(addresses: string[]): Promise<Collection[]> {
       top_bids?: { value: number; payment_token: { symbol: string } }[]
     }[]
   }>(
-    `https://api.simplehash.com/api/v0/nfts/collections_by_wallets?chains=${Object.keys(
-      chains,
-    ).join(',')}&wallet_addresses=${addresses
-      .filter(isAddress)
-      .join(',')}&nft_ids=1`,
+    `https://api.simplehash.com/api/v0/nfts/collections_by_wallets?chains=${supportedChains.join(
+      ',',
+    )}&wallet_addresses=${addresses.filter(isAddress).join(',')}&nft_ids=1`,
     {
       headers: {
         authority: 'api.simplehash.com',

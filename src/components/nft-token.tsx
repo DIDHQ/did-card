@@ -4,14 +4,14 @@ import {
   trackWindowScroll,
 } from 'react-lazy-load-image-component'
 import { useCallback, useState } from 'react'
-import { chains } from '@/utils/constant'
+import { reservoirs } from '@/utils/chain'
 
 function nftId2Image(nftId: string): string | undefined {
   const [chain, contract, token] = nftId.split('.')
-  if (!chain || !chains[chain]) {
+  if (!chain || !reservoirs[chain]) {
     return
   }
-  return `https://${chains[chain]}/redirect/tokens/${contract}:${token}/image/v1`
+  return `https://${reservoirs[chain]}/redirect/tokens/${contract}:${token}/image/v1`
 }
 
 export default trackWindowScroll(function NftToken(props: {
