@@ -4,8 +4,8 @@ import {
   ScrollPosition,
   trackWindowScroll,
 } from 'react-lazy-load-image-component'
-import { Collection } from '@/server/routers/nft'
 import { chains } from '@/utils/constant'
+import { Collection } from '@/utils/type'
 
 function nftId2Image(nftId: string): string | undefined {
   const [chain, contract, token] = nftId.split('.')

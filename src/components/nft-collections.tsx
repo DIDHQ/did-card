@@ -1,6 +1,6 @@
 import { GroupedVirtuoso } from 'react-virtuoso'
 import NftTokens from './nft-tokens'
-import type { Collection } from '@/server/routers/nft'
+import { Collection } from '@/utils/type'
 
 export default function NftCollections(props: {
   addresses?: string[]
