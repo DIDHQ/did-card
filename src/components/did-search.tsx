@@ -14,9 +14,9 @@ export default function DIDSearch(props: {
   const { data: addresses, isLoading: isAddressesLoading } =
     useRelatedAddresses(did)
   const { data: collections, isLoading: isCollectionsLoading } =
-    trpc.nft.listCollections.useQuery(
+    trpc.nft.list.useQuery(
       { addresses },
-      { enabled: !!addresses?.length },
+      { enabled: !!addresses?.length, refetchOnWindowFocus: false },
     )
 
   return (
