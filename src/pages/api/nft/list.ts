@@ -27,6 +27,7 @@ async function simpleHash(addresses: string[]): Promise<Collection[]> {
       nft_ids?: string[]
       top_contracts?: string[]
       top_bids?: { value: number; payment_token: { symbol: string } }[]
+      floor_prices?: []
     }[]
   }>(
     `https://api.simplehash.com/api/v0/nfts/collections_by_wallets?chains=${supportedChains.join(
@@ -48,7 +49,10 @@ async function simpleHash(addresses: string[]): Promise<Collection[]> {
   return sortBy(
     json.collections.filter(
       (collection) =>
-        collection.name && collection.image_url && collection.nft_ids,
+        collection.name &&
+        collection.image_url &&
+        collection.nft_ids &&
+        (collection.top_bids?.length || collection.floor_prices?.length),
     ),
     [
       (collection) =>
