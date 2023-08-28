@@ -2,6 +2,7 @@ import { createPublicClient, http, labelhash, namehash, parseAbi } from 'viem'
 import { mainnet } from 'viem/chains'
 import { normalize } from 'viem/ens'
 import { compact, uniq } from 'remeda'
+import { fetchJSON } from './fetch'
 
 const publicClient = createPublicClient({
   chain: mainnet,
@@ -90,7 +91,13 @@ async function getBitAccountInfo(
   did: string,
 ): Promise<{ manager: string | null; owner: string | null }> {
   try {
-    const response = await fetch('https://indexer-v1.did.id/', {
+    const json = await fetchJSON<{
+      result: {
+        data: {
+          account_info: { manager_key: string; owner_key: string }
+        } | null
+      }
+    }>('https://indexer-v1.did.id/', {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify({
@@ -100,13 +107,6 @@ async function getBitAccountInfo(
         params: [{ account: did.endsWith('.bit') ? did : `${did}.bit` }],
       }),
     })
-    const json = (await response.json()) as {
-      result: {
-        data: {
-          account_info: { manager_key: string; owner_key: string }
-        } | null
-      }
-    }
     if (!json.result.data) {
       return { manager: null, owner: null }
     }
@@ -122,17 +122,13 @@ async function getBitAccountInfo(
 
 async function getBitAccountReverseAddresses(did: string): Promise<string[]> {
   try {
-    const response = await fetch(
-      'https://indexer-v1.did.id/v1/account/reverse/address',
-      {
-        method: 'POST',
-        headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ account: did }),
-      },
-    )
-    const json = (await response.json()) as {
+    const json = await fetchJSON<{
       data: { list: { key_info: { key: string } }[] } | null
-    }
+    }>('https://indexer-v1.did.id/v1/account/reverse/address', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ account: did }),
+    })
     return (
       json.data?.list.map(({ key_info: { key } }) => normalizeAddress(key)) ??
       []

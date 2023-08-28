@@ -5,6 +5,7 @@ import NftCollections from './nft-collections'
 import { LoadingIcon, SearchIcon } from './icon'
 import useRelatedAddresses from '@/hooks/use-related-addresses'
 import { Collection } from '@/utils/type'
+import { fetchJSON } from '@/utils/fetch'
 
 export default function DIDSearch(props: {
   setDid: (did: string) => void
@@ -16,10 +17,10 @@ export default function DIDSearch(props: {
     useRelatedAddresses(did)
   const { data: collections, isLoading: isCollectionsLoading } = useSWR(
     addresses?.length ? ['nft', addresses] : null,
-    async () => {
-      const response = await fetch(`/api/nft?addresses=${addresses?.join(',')}`)
-      return (await response.json()) as Collection[]
-    },
+    () =>
+      fetchJSON<Collection[]>(
+        `/api/nft/list?addresses=${addresses?.join(',')}`,
+      ),
     { revalidateOnFocus: false },
   )
 
