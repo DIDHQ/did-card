@@ -13,12 +13,17 @@ export default async function handler(req: NextRequest) {
     return new Response(null, { status: 400 })
   }
 
-  const json = await simpleHash(addresses)
+  const json = await simpleHash(addresses).catch(() =>
+    simpleHash(addresses, process.env.SIMPLE_HASH_API_KEY),
+  )
 
   return NextResponse.json(json)
 }
 
-async function simpleHash(addresses: string[]): Promise<Collection[]> {
+async function simpleHash(
+  addresses: string[],
+  apiKey?: string,
+): Promise<Collection[]> {
   const json = await fetchJSON<{
     collections: {
       name: string | null
@@ -34,15 +39,17 @@ async function simpleHash(addresses: string[]): Promise<Collection[]> {
       ',',
     )}&wallet_addresses=${addresses.filter(isAddress).join(',')}&nft_ids=1`,
     {
-      headers: {
-        authority: 'api.simplehash.com',
-        accept: 'application/json',
-        origin: 'https://docs.simplehash.com',
-        referer: 'https://docs.simplehash.com/',
-        'user-agent':
-          'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36',
-        'x-api-key': 'sh_sk1_Z4jhWXXBE09em',
-      },
+      headers: apiKey
+        ? { 'x-api-key': apiKey }
+        : {
+            authority: 'api.simplehash.com',
+            accept: 'application/json',
+            origin: 'https://docs.simplehash.com',
+            referer: 'https://docs.simplehash.com/',
+            'user-agent':
+              'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36',
+            'x-api-key': 'sh_sk1_Z4jhWXXBE09em',
+          },
     },
   )
 
