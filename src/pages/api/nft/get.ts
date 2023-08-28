@@ -3,6 +3,8 @@ import { createPublicClient, http, isAddress, parseAbi } from 'viem'
 import { fetchJSON } from '@/utils/fetch'
 import { rpcUrls } from '@/utils/chain'
 
+export const runtime = 'edge'
+
 export default async function handler(req: NextRequest) {
   const nftId = req.nextUrl.searchParams.get('id')
   if (!nftId) {
@@ -32,7 +34,7 @@ async function metadataImage(nftId: string): Promise<string | null> {
   }
 
   const client = createPublicClient({
-    transport: http('https://rpc.ankr.com/eth/'),
+    transport: http(`https://${rpcUrls[chain]}`),
     batch: { multicall: true },
   })
   const tokenURI = await Promise.any([

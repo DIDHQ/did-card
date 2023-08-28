@@ -22,8 +22,9 @@ export default trackWindowScroll(function NftToken(props: {
 }) {
   const [image, setImage] = useState(nftId2Image(props.nftId))
   const handleError = useCallback(() => {
-    setImage(undefined)
-  }, [])
+    const fallback = `/api/nft/get?id=${props.nftId}`
+    setImage((old) => (old === fallback ? undefined : fallback))
+  }, [props.nftId])
   const handleClick = useCallback(() => {
     if (image) {
       props.onSelect(image)
