@@ -3,6 +3,7 @@ import {
   ScrollPosition,
   trackWindowScroll,
 } from 'react-lazy-load-image-component'
+import { useCallback, useState } from 'react'
 import { chains } from '@/utils/constant'
 
 function nftId2Image(nftId: string): string | undefined {
@@ -19,14 +20,23 @@ export default trackWindowScroll(function NftToken(props: {
   scrollPosition: ScrollPosition
   className?: string
 }) {
-  const image = nftId2Image(props.nftId)
+  const [image, setImage] = useState(nftId2Image(props.nftId))
+  const handleError = useCallback(() => {
+    setImage(undefined)
+  }, [])
+  const handleClick = useCallback(() => {
+    if (image) {
+      props.onSelect(image)
+    }
+  }, [image, props])
 
   return image ? (
     <LazyLoadImage
       src={image}
       alt={props.nftId}
       scrollPosition={props.scrollPosition}
-      onClick={() => props.onSelect(image)}
+      onError={handleError}
+      onClick={handleClick}
       wrapperClassName="block h-32 w-32"
       className="h-32 w-32 cursor-pointer rounded-xl bg-gray-50 object-cover ring-gray-200 transition-shadow hover:ring"
     />
