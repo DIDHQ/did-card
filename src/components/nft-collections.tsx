@@ -3,7 +3,6 @@ import NftToken from './nft-token'
 import { Collection } from '@/utils/type'
 
 export default function NftCollections(props: {
-  addresses?: string[]
   collections?: Collection[]
   onSelect(image: string): void
   className?: string

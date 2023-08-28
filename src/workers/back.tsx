@@ -36,7 +36,7 @@ export async function generateBack(offset: number) {
       </div>
     </div>,
     {
-      width: 1960,
+      width: 1988,
       height: 3108,
       fonts: fonts!.map((data) => ({ name: 'Inter', data })),
     },

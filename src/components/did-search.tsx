@@ -41,7 +41,6 @@ export default function DIDSearch(props: {
       </div>
       {did ? (
         <NftCollections
-          addresses={addresses}
           collections={collections}
           onSelect={(image) => {
             props.setImage(image)
