@@ -3,7 +3,7 @@ import clsx from 'clsx'
 import NftCollections from './nft-collections'
 import { LoadingIcon, SearchIcon } from './icon'
 import useRelatedAddresses from '@/hooks/use-related-addresses'
-import { useCollections } from '@/hooks/use-nfts'
+import { trpc } from '@/utils/trpc'
 
 export default function DIDSearch(props: {
   setDid: (did: string) => void
@@ -14,7 +14,10 @@ export default function DIDSearch(props: {
   const { data: addresses, isLoading: isAddressesLoading } =
     useRelatedAddresses(did)
   const { data: collections, isLoading: isCollectionsLoading } =
-    useCollections(addresses)
+    trpc.nft.listCollections.useQuery(
+      { addresses },
+      { enabled: !!addresses?.length },
+    )
 
   return (
     <div className={clsx('flex h-full flex-col', props.className)}>

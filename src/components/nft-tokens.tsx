@@ -4,7 +4,16 @@ import {
   ScrollPosition,
   trackWindowScroll,
 } from 'react-lazy-load-image-component'
-import { Collection, useTokens } from '@/hooks/use-nfts'
+import { Collection } from '@/server/routers/nft'
+import { chains } from '@/utils/constant'
+
+function nftId2Image(nftId: string): string | undefined {
+  const [chain, contract, token] = nftId.split('.')
+  if (!chain || !chains[chain]) {
+    return
+  }
+  return `https://${chains[chain]}/redirect/tokens/${contract}:${token}/image/v1`
+}
 
 export default trackWindowScroll(function NftTokens(props: {
   addresses?: string[]
@@ -13,40 +22,22 @@ export default trackWindowScroll(function NftTokens(props: {
   scrollPosition: ScrollPosition
   className?: string
 }) {
-  const { data: tokens } = useTokens(props.addresses, props.collection?.id)
-
   return (
     <div className={clsx('flex flex-wrap gap-6', props.className)}>
-      {tokens
-        ? tokens.map((token) =>
-            token.image ? (
-              <LazyLoadImage
-                key={token.token}
-                src={token.image}
-                effect="opacity"
-                alt="nft"
-                scrollPosition={props.scrollPosition}
-                onClick={() =>
-                  token.image ? props.onSelect(token.image) : null
-                }
-                wrapperClassName="block h-32 w-32"
-                className="h-32 w-32 cursor-pointer rounded-xl bg-gray-50 object-cover ring-gray-200 transition-shadow hover:ring"
-              />
-            ) : (
-              <div
-                key={token.token}
-                className="h-32 w-32 cursor-wait rounded-xl bg-gray-50"
-              />
-            ),
-          )
-        : Array.from({ length: props.collection?.tokenCount ?? 0 }).map(
-            (_, index) => (
-              <div
-                key={index}
-                className="h-32 w-32 cursor-wait rounded-xl bg-gray-50"
-              />
-            ),
-          )}
+      {props.collection?.nft_ids.map((nftId) => {
+        const image = nftId2Image(nftId)
+        return image ? (
+          <LazyLoadImage
+            key={nftId}
+            src={image}
+            alt="nft"
+            scrollPosition={props.scrollPosition}
+            onClick={() => props.onSelect(image)}
+            wrapperClassName="block h-32 w-32"
+            className="h-32 w-32 cursor-pointer rounded-xl bg-gray-50 object-cover ring-gray-200 transition-shadow hover:ring"
+          />
+        ) : null
+      })}
     </div>
   )
 })
