@@ -1,13 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { sortBy } from 'remeda'
+import { isAddress } from 'viem'
 import { chains } from '@/utils/constant'
 import { Collection } from '@/utils/type'
+import { fetchJSON } from '@/utils/fetch'
 
 export const runtime = 'edge'
 
 export default async function handler(req: NextRequest) {
-  const addresses = req.nextUrl.searchParams.get('addresses')
-  if (typeof addresses !== 'string' || !addresses) {
+  const addresses = req.nextUrl.searchParams.get('addresses')?.split(',')
+  if (!addresses?.length) {
     return new Response(null, { status: 400 })
   }
 
@@ -16,11 +18,22 @@ export default async function handler(req: NextRequest) {
   return NextResponse.json(json)
 }
 
-async function simpleHash(addresses: string): Promise<Collection[]> {
-  const response = await fetch(
+async function simpleHash(addresses: string[]): Promise<Collection[]> {
+  const json = await fetchJSON<{
+    collections: {
+      name: string | null
+      image_url: string | null
+      distinct_nfts_owned: number
+      nft_ids?: string[]
+      top_contracts?: string[]
+      top_bids?: { value: number; payment_token: { symbol: string } }[]
+    }[]
+  }>(
     `https://api.simplehash.com/api/v0/nfts/collections_by_wallets?chains=${Object.keys(
       chains,
-    ).join(',')}&wallet_addresses=${addresses}&nft_ids=1`,
+    ).join(',')}&wallet_addresses=${addresses
+      .filter(isAddress)
+      .join(',')}&nft_ids=1`,
     {
       headers: {
         authority: 'api.simplehash.com',
@@ -33,17 +46,6 @@ async function simpleHash(addresses: string): Promise<Collection[]> {
       },
     },
   )
-
-  const json = (await response.json()) as {
-    collections: {
-      name: string | null
-      image_url: string | null
-      distinct_nfts_owned: number
-      nft_ids?: string[]
-      top_contracts?: string[]
-      top_bids?: { value: number; payment_token: { symbol: string } }[]
-    }[]
-  }
 
   return sortBy(
     json.collections.filter(
