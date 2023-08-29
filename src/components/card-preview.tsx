@@ -1,11 +1,19 @@
 import clsx from 'clsx'
 import useSWRMutation from 'swr/mutation'
-import { useCallback, useRef } from 'react'
+import { useCallback, useEffect, useRef } from 'react'
 import { useAtomValue } from 'jotai'
+import { useRouter } from 'next/router'
 import DidCard from './did-card'
-import { DownloadIcon, LoadingIcon, PrintIcon, UploadIcon } from './icon'
+import {
+  DownloadIcon,
+  LoadingIcon,
+  NfcIcon,
+  PrintIcon,
+  UploadIcon,
+} from './icon'
 import ParallaxStars from './parallax-stars'
 import { flippedAtom } from '@/utils/atom'
+import { fetchJSON } from '@/utils/fetch'
 
 /**
  * @see https://fjolt.com/article/css-3d-interactive-flippable-cards
@@ -22,6 +30,8 @@ export default function CardPreview(props: {
 }) {
   const { front, back, png, onDidChange, onImageChange } = props
 
+  const router = useRouter()
+  const nfc = router.query.nfc as string | undefined
   const flipped = useAtomValue(flippedAtom)
   const inputRef = useRef<HTMLInputElement>(null)
   const { trigger: download, isMutating: isDownloading } = useSWRMutation(
@@ -38,6 +48,30 @@ export default function CardPreview(props: {
       anchor.click()
     },
   )
+  const {
+    trigger: write,
+    isMutating: isWriting,
+    error,
+  } = useSWRMutation('write', async () => {
+    if (!nfc || !props.did) {
+      return
+    }
+
+    const json = await fetchJSON<{ code: number }>(nfc, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ url: `https://d.id/${props.did}` }),
+    })
+    if (json.code !== 0) {
+      throw new Error('write error')
+    }
+  })
+  useEffect(() => {
+    console.error(error)
+    if (error && error instanceof Error) {
+      alert(error.message)
+    }
+  }, [error])
   const handleFile = useCallback(
     (file?: File) => {
       if (!file) {
@@ -113,6 +147,19 @@ export default function CardPreview(props: {
           >
             <PrintIcon className="h-8 w-8 text-gray-800" />
           </button>
+          {nfc ? (
+            <button
+              disabled={!props.did || isWriting}
+              onClick={() => write()}
+              className="mt-16 rounded-full bg-white p-2 font-semibold leading-4 shadow-2xl transition-colors hover:bg-gray-300 disabled:cursor-wait"
+            >
+              {isWriting ? (
+                <LoadingIcon className="h-8 w-8 text-gray-400" />
+              ) : (
+                <NfcIcon className="h-8 w-8 text-gray-800" />
+              )}
+            </button>
+          ) : null}
         </div>
       </div>
     </div>
