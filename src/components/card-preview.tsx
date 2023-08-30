@@ -122,30 +122,34 @@ export default function CardPreview(props: {
       >
         <DidCard front={front} back={back} />
         <div className="flex gap-8">
-          <button
-            onClick={() => inputRef.current?.click()}
-            className="mt-16 rounded-full bg-white p-2 font-semibold leading-4 shadow-2xl transition-colors hover:bg-gray-300 disabled:cursor-not-allowed"
-          >
-            <input
-              ref={inputRef}
-              type="file"
-              accept="image/png,image/jpg,image/jpeg,image/gif"
-              onChange={(e) => handleFile(e.target.files?.[0])}
-              className="hidden"
-            />
-            <UploadIcon className="h-8 w-8 text-gray-800" />
-          </button>
-          <button
-            disabled={!png || isDownloading}
-            onClick={() => download()}
-            className="mt-16 rounded-full bg-white p-2 font-semibold leading-4 shadow-2xl transition-colors hover:bg-gray-300 disabled:cursor-not-allowed"
-          >
-            {isDownloading ? (
-              <LoadingIcon className="h-8 w-8 text-gray-400" />
-            ) : (
-              <DownloadIcon className="h-8 w-8 text-gray-800" />
-            )}
-          </button>
+          {router.query.upload ? (
+            <button
+              onClick={() => inputRef.current?.click()}
+              className="mt-16 rounded-full bg-white p-2 font-semibold leading-4 shadow-2xl transition-colors hover:bg-gray-300 disabled:cursor-not-allowed"
+            >
+              <input
+                ref={inputRef}
+                type="file"
+                accept="image/png,image/jpg,image/jpeg,image/gif"
+                onChange={(e) => handleFile(e.target.files?.[0])}
+                className="hidden"
+              />
+              <UploadIcon className="h-8 w-8 text-gray-800" />
+            </button>
+          ) : null}
+          {router.query.download ? (
+            <button
+              disabled={!png || isDownloading}
+              onClick={() => download()}
+              className="mt-16 rounded-full bg-white p-2 font-semibold leading-4 shadow-2xl transition-colors hover:bg-gray-300 disabled:cursor-not-allowed"
+            >
+              {isDownloading ? (
+                <LoadingIcon className="h-8 w-8 text-gray-400" />
+              ) : (
+                <DownloadIcon className="h-8 w-8 text-gray-800" />
+              )}
+            </button>
+          ) : null}
           <button
             disabled={!png}
             onClick={() => window.print()}
