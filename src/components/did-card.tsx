@@ -163,7 +163,7 @@ export default function DidCard(props: {
             className="pointer-events-none absolute inset-0 z-50 h-full w-full rounded-[12.5pt] mix-blend-hard-light transition-all duration-100 ease-out"
           />
         ) : (
-          <div className="flex h-[215.5pt] w-full items-center justify-center bg-gray-400">
+          <div className="flex h-[212.5pt] w-full items-center justify-center bg-gray-400">
             <LoadingIcon className="h-24 w-24 text-white" />
           </div>
         )}
