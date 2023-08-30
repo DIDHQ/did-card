@@ -21,7 +21,9 @@ export default function NftCollections(props: {
                 src="/favicon.png"
                 alt="favicon"
                 onClick={() =>
-                  props.onSelect(`${window.location.href}/favicon.png`)
+                  props.onSelect(
+                    `${new URL(window.location.href).origin}/favicon.png`,
+                  )
                 }
                 className="h-32 w-32 cursor-pointer rounded-xl object-cover ring-gray-200 transition-shadow hover:ring"
               />
