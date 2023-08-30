@@ -3,6 +3,9 @@ import useSWRMutation from 'swr/mutation'
 import { useCallback, useRef, useState } from 'react'
 import { useAtomValue } from 'jotai'
 import { useRouter } from 'next/router'
+import { useWindowSize } from '@uidotdev/usehooks'
+import Confetti from 'react-confetti'
+import { createPortal } from 'react-dom'
 import DidCard from './did-card'
 import {
   DownloadIcon,
@@ -14,9 +17,6 @@ import {
 import ParallaxStars from './parallax-stars'
 import { flippedAtom } from '@/utils/atom'
 import { fetchJSON } from '@/utils/fetch'
-import { useWindowSize } from '@uidotdev/usehooks'
-import Confetti from 'react-confetti'
-import { createPortal } from 'react-dom'
 
 /**
  * @see https://fjolt.com/article/css-3d-interactive-flippable-cards
