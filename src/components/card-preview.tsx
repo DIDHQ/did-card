@@ -1,6 +1,6 @@
 import clsx from 'clsx'
 import useSWRMutation from 'swr/mutation'
-import { useCallback, useEffect, useRef } from 'react'
+import { useCallback, useRef, useState } from 'react'
 import { useAtomValue } from 'jotai'
 import { useRouter } from 'next/router'
 import DidCard from './did-card'
@@ -51,32 +51,37 @@ export default function CardPreview(props: {
       anchor.click()
     },
   )
-  const {
-    trigger: write,
-    isMutating: isWriting,
-    data,
-    error,
-  } = useSWRMutation('write', async () => {
-    if (!nfc || !props.did) {
-      return false
-    }
+  const [success, setSuccess] = useState(false)
+  const { trigger: write, isMutating: isWriting } = useSWRMutation(
+    'write',
+    async () => {
+      setSuccess(false)
+      if (!nfc || !props.did) {
+        return
+      }
 
-    const json = await fetchJSON<{ code: number }>(nfc, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ url: `https://d.id/${props.did}` }),
-    })
-    if (json.code !== 0) {
-      throw new Error('write error')
-    }
-    return true
-  })
-  useEffect(() => {
-    console.error(error)
-    if (error && error instanceof Error) {
-      alert(error.message)
-    }
-  }, [error])
+      const json = await fetchJSON<{ code: number }>(nfc, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ url: `https://d.id/${props.did}` }),
+      })
+      if (json.code !== 0) {
+        throw new Error('write error')
+      }
+      return
+    },
+    {
+      onSuccess() {
+        setSuccess(true)
+      },
+      onError(err) {
+        setSuccess(false)
+        if (err instanceof Error) {
+          alert(err.message)
+        }
+      },
+    },
+  )
   const handleFile = useCallback(
     (file?: File) => {
       if (!file) {
@@ -172,7 +177,7 @@ export default function CardPreview(props: {
           ) : null}
         </div>
       </div>
-      {width && height && data
+      {width && height && success
         ? createPortal(
             <Confetti width={width} height={height} recycle={false} />,
             document.body,
