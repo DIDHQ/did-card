@@ -5,6 +5,7 @@ import useSWR from 'swr'
 import { wrap } from 'comlink'
 import { useRouter } from 'next/router'
 import { useAtomValue } from 'jotai'
+import Head from 'next/head'
 import DIDSearch from '@/components/did-search'
 import type { generateFront } from '@/workers/front'
 import type { generateBack } from '@/workers/back'
@@ -79,6 +80,10 @@ export default function IndexPage() {
 
   return (
     <>
+      <Head>
+        <title>{did ? `${did}'s DID Card` : 'DID Card'}</title>
+        <link rel="icon" href={image || '/favicon.png'} />
+      </Head>
       <Allotment minSize={320} className="h-screen w-screen print:hidden">
         <DIDSearch
           setDid={setDid}
