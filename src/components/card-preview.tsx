@@ -118,7 +118,7 @@ export default function CardPreview(props: {
         <div className="flex gap-8">
           <button
             onClick={() => inputRef.current?.click()}
-            className="mt-16 rounded-full bg-white p-2 font-semibold leading-4 shadow-2xl transition-colors hover:bg-gray-300 disabled:cursor-wait"
+            className="mt-16 rounded-full bg-white p-2 font-semibold leading-4 shadow-2xl transition-colors hover:bg-gray-300 disabled:cursor-not-allowed"
           >
             <input
               ref={inputRef}
@@ -132,7 +132,7 @@ export default function CardPreview(props: {
           <button
             disabled={!png || isDownloading}
             onClick={() => download()}
-            className="mt-16 rounded-full bg-white p-2 font-semibold leading-4 shadow-2xl transition-colors hover:bg-gray-300 disabled:cursor-wait"
+            className="mt-16 rounded-full bg-white p-2 font-semibold leading-4 shadow-2xl transition-colors hover:bg-gray-300 disabled:cursor-not-allowed"
           >
             {isDownloading ? (
               <LoadingIcon className="h-8 w-8 text-gray-400" />
@@ -143,7 +143,7 @@ export default function CardPreview(props: {
           <button
             disabled={!png}
             onClick={() => window.print()}
-            className="mt-16 rounded-full bg-white p-2 font-semibold leading-4 shadow-2xl transition-colors hover:bg-gray-300 disabled:cursor-wait"
+            className="mt-16 rounded-full bg-white p-2 font-semibold leading-4 shadow-2xl transition-colors hover:bg-gray-300 disabled:cursor-not-allowed"
           >
             <PrintIcon className="h-8 w-8 text-gray-800" />
           </button>
@@ -151,7 +151,7 @@ export default function CardPreview(props: {
             <button
               disabled={!props.did || isWriting}
               onClick={() => write()}
-              className="mt-16 rounded-full bg-white p-2 font-semibold leading-4 shadow-2xl transition-colors hover:bg-gray-300 disabled:cursor-wait"
+              className="mt-16 rounded-full bg-white p-2 font-semibold leading-4 shadow-2xl transition-colors hover:bg-gray-300 disabled:cursor-not-allowed"
             >
               {isWriting ? (
                 <LoadingIcon className="h-8 w-8 text-gray-400" />
