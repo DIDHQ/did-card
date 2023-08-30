@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import svgToMiniDataURI from 'mini-svg-data-uri'
 import clsx from 'clsx'
 import { useAtom } from 'jotai'
 import { LoadingIcon } from './icon'
 import { flippedAtom } from '@/utils/atom'
+import { svgToDataURI } from '@/utils/svg'
 
 export default function DidCard(props: {
   front?: string
@@ -99,11 +99,11 @@ export default function DidCard(props: {
     setFlipped(false)
   }, [props.front, setFlipped])
   const frontImage = useMemo(
-    () => (props.front ? `url("${svgToMiniDataURI(props.front)}")` : undefined),
+    () => (props.front ? `url(${svgToDataURI(props.front)})` : undefined),
     [props.front],
   )
   const backImage = useMemo(
-    () => (props.back ? svgToMiniDataURI(props.back) : undefined),
+    () => (props.back ? svgToDataURI(props.back) : undefined),
     [props.back],
   )
 
