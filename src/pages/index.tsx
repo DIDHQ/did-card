@@ -96,14 +96,14 @@ export default function IndexPage() {
           className="h-full w-full"
         />
       </Allotment>
-      <div className="hidden h-[56mm] w-[88mm] overflow-hidden print:block">
+      <div className="hidden h-[100vh] w-[100vw] overflow-hidden print:block">
         <img
           src={png}
           alt="print"
           style={{
             transform: 'rotate(90deg) translateY(-100%)',
           }}
-          className="h-[88mm] w-[56mm] origin-top-left object-cover"
+          className="h-[100vw] w-[100vh] origin-top-left object-cover"
         />
       </div>
     </>

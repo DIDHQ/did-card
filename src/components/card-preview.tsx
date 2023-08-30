@@ -63,9 +63,7 @@ export default function CardPreview(props: {
       const json = await fetchJSON<{ code: number }>(nfc, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          url: `${new URL(window.location.href).origin}/${props.did}`,
-        }),
+        body: JSON.stringify({ url: `https://d.id/${props.did}` }),
       })
       if (json.code !== 0) {
         throw new Error('write error')
