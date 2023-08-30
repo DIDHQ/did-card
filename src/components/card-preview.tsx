@@ -17,6 +17,7 @@ import {
 import ParallaxStars from './parallax-stars'
 import { flippedAtom } from '@/utils/atom'
 import { fetchJSON } from '@/utils/fetch'
+import useBeep from '@/hooks/use-beep'
 
 /**
  * @see https://fjolt.com/article/css-3d-interactive-flippable-cards
@@ -35,6 +36,7 @@ export default function CardPreview(props: {
 
   const router = useRouter()
   const nfc = router.query.nfc as string | undefined
+  const beep = useBeep()
   const flipped = useAtomValue(flippedAtom)
   const inputRef = useRef<HTMLInputElement>(null)
   const { trigger: download, isMutating: isDownloading } = useSWRMutation(
@@ -60,19 +62,20 @@ export default function CardPreview(props: {
         return
       }
 
-      const json = await fetchJSON<{ code: number }>(nfc, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ url: `https://d.id/${props.did}` }),
-      })
-      if (json.code !== 0) {
-        throw new Error('write error')
-      }
+      // const json = await fetchJSON<{ code: number }>(nfc, {
+      //   method: 'POST',
+      //   headers: { 'Content-Type': 'application/json' },
+      //   body: JSON.stringify({ url: `https://d.id/${props.did}` }),
+      // })
+      // if (json.code !== 0) {
+      //   throw new Error('write error')
+      // }
       return
     },
     {
       onSuccess() {
         setSuccess(true)
+        beep()
       },
       onError(err) {
         setSuccess(false)
