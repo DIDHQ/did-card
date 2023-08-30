@@ -58,7 +58,7 @@ export default function CardPreview(props: {
     error,
   } = useSWRMutation('write', async () => {
     if (!nfc || !props.did) {
-      return
+      return false
     }
 
     const json = await fetchJSON<{ code: number }>(nfc, {
