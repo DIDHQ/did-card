@@ -79,8 +79,8 @@ export async function generateFront(did?: string, image?: string) {
           src={await trySvgToDataURI(image)}
           alt="nft"
           style={{
-            height: 1988,
-            width: 1988,
+            height: 1960,
+            width: 1960,
             flexShrink: 0,
             objectFit: 'cover',
           }}
@@ -88,8 +88,8 @@ export async function generateFront(did?: string, image?: string) {
       ) : (
         <div
           style={{
-            height: 1988,
-            width: 1988,
+            height: 1960,
+            width: 1960,
             flexShrink: 0,
             display: 'flex',
             alignItems: 'center',
@@ -152,7 +152,7 @@ export async function generateFront(did?: string, image?: string) {
       </div>
     </div>,
     {
-      width: 1988,
+      width: 1960,
       height: 3108,
       fonts: fonts!.map((data) => ({ name: 'Inter', data })),
     },
