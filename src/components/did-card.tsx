@@ -148,6 +148,7 @@ export default function DidCard(props: {
           filter: 'drop-shadow(0 15px 15px rgba(0,0,0,0.3))',
           willChange: 'transform, filter',
           backgroundImage: frontImage,
+          backgroundPosition: '50% 50%',
         }}
         className="h-full w-full overflow-hidden rounded-[12.5pt] bg-black bg-cover object-cover transition-all duration-150 ease-out"
       >
