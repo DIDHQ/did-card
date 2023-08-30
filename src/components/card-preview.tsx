@@ -14,6 +14,9 @@ import {
 import ParallaxStars from './parallax-stars'
 import { flippedAtom } from '@/utils/atom'
 import { fetchJSON } from '@/utils/fetch'
+import { useWindowSize } from '@uidotdev/usehooks'
+import Confetti from 'react-confetti'
+import { createPortal } from 'react-dom'
 
 /**
  * @see https://fjolt.com/article/css-3d-interactive-flippable-cards
@@ -51,6 +54,7 @@ export default function CardPreview(props: {
   const {
     trigger: write,
     isMutating: isWriting,
+    data,
     error,
   } = useSWRMutation('write', async () => {
     if (!nfc || !props.did) {
@@ -65,6 +69,7 @@ export default function CardPreview(props: {
     if (json.code !== 0) {
       throw new Error('write error')
     }
+    return true
   })
   useEffect(() => {
     console.error(error)
@@ -87,6 +92,7 @@ export default function CardPreview(props: {
     },
     [onDidChange, onImageChange],
   )
+  const { width, height } = useWindowSize()
 
   return (
     <div
@@ -162,6 +168,12 @@ export default function CardPreview(props: {
           ) : null}
         </div>
       </div>
+      {width && height && data
+        ? createPortal(
+            <Confetti width={width} height={height} />,
+            document.body,
+          )
+        : null}
     </div>
   )
 }
