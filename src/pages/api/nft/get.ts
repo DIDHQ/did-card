@@ -24,6 +24,7 @@ function wrapURL(url: string) {
   return url
     .replace('ipfs://', 'https://ipfs.io/ipfs/')
     .replace('https://gateway.pinata.cloud/ipfs/', 'https://ipfs.io/ipfs/')
+    .replace('https://rarible.mypinata.cloud/ipfs/', 'https://ipfs.io/ipfs/')
     .replace('ar://', 'https://arweave.net/')
 }
 
