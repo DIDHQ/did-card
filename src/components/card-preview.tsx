@@ -170,7 +170,7 @@ export default function CardPreview(props: {
       </div>
       {width && height && data
         ? createPortal(
-            <Confetti width={width} height={height} />,
+            <Confetti width={width} height={height} recycle={false} />,
             document.body,
           )
         : null}
