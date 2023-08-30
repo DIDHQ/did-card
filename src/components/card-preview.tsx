@@ -62,14 +62,14 @@ export default function CardPreview(props: {
         return
       }
 
-      // const json = await fetchJSON<{ code: number }>(nfc, {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify({ url: `https://d.id/${props.did}` }),
-      // })
-      // if (json.code !== 0) {
-      //   throw new Error('write error')
-      // }
+      const json = await fetchJSON<{ code: number }>(nfc, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ url: `https://d.id/${props.did}` }),
+      })
+      if (json.code !== 0) {
+        throw new Error('write error')
+      }
       return
     },
     {
