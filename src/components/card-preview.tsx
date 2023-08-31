@@ -1,6 +1,6 @@
 import clsx from 'clsx'
 import useSWRMutation from 'swr/mutation'
-import { useCallback, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { useAtomValue } from 'jotai'
 import { useRouter } from 'next/router'
 import { useWindowSize } from '@uidotdev/usehooks'
@@ -126,6 +126,20 @@ export default function CardPreview(props: {
     [onDidChange, onImageChange],
   )
   const { width, height } = useWindowSize()
+  useEffect(() => {
+    if (!isPrinting || success) {
+      return
+    }
+    function handler(event: BeforeUnloadEvent) {
+      event.preventDefault()
+      event.returnValue = ''
+      return ''
+    }
+    window.addEventListener('beforeunload', handler)
+    return () => {
+      window.removeEventListener('beforeunload', handler)
+    }
+  }, [isPrinting, success])
 
   return (
     <div
