@@ -7,17 +7,10 @@ import { useWindowSize } from '@uidotdev/usehooks'
 import Confetti from 'react-confetti'
 import { createPortal } from 'react-dom'
 import DidCard from './did-card'
-import {
-  DownloadIcon,
-  LoadingIcon,
-  NfcIcon,
-  PrintIcon,
-  UploadIcon,
-} from './icon'
+import { DownloadIcon, LoadingIcon, PrintIcon, UploadIcon } from './icon'
 import ParallaxStars from './parallax-stars'
 import { flippedAtom } from '@/utils/atom'
 import { fetchJSON } from '@/utils/fetch'
-import useBeep from '@/hooks/use-beep'
 
 /**
  * @see https://fjolt.com/article/css-3d-interactive-flippable-cards
@@ -36,7 +29,6 @@ export default function CardPreview(props: {
 
   const router = useRouter()
   const nfc = router.query.nfc as string | undefined
-  const beep = useBeep()
   const flipped = useAtomValue(flippedAtom)
   const inputRef = useRef<HTMLInputElement>(null)
   const { trigger: download, isMutating: isDownloading } = useSWRMutation(
@@ -54,32 +46,52 @@ export default function CardPreview(props: {
     },
   )
   const [success, setSuccess] = useState(false)
-  const { trigger: write, isMutating: isWriting } = useSWRMutation(
-    'write',
+  const { trigger: print, isMutating: isPrinting } = useSWRMutation(
+    'print',
     async () => {
       setSuccess(false)
-      if (!nfc || !props.did) {
-        return
+
+      if (nfc) {
+        const json = await fetchJSON<{ code: number; err?: string }>(
+          `${nfc}/check-status`,
+          {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({}),
+          },
+        )
+        if (json.code !== 0) {
+          throw new Error(json.err)
+        }
       }
 
-      const json = await fetchJSON<{ code: number }>(nfc, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ url: `https://d.id/${props.did}` }),
-      })
-      if (json.code !== 0) {
-        throw new Error('write error')
+      window.print()
+
+      if (nfc) {
+        if (!props.did) {
+          throw new Error('no DID selected')
+        }
+        const json = await fetchJSON<{ code: number; err?: string }>(
+          `${nfc}/write-ntag`,
+          {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ url: `https://d.id/${props.did}` }),
+          },
+        )
+        if (json.code !== 0) {
+          throw new Error(json.err)
+        }
       }
-      return
     },
     {
       onSuccess() {
         setSuccess(true)
-        beep()
       },
       onError(err) {
         setSuccess(false)
         if (err instanceof Error) {
+          console.error(err)
           alert(err.message)
         }
       },
@@ -159,25 +171,16 @@ export default function CardPreview(props: {
             </button>
           ) : null}
           <button
-            disabled={!png}
-            onClick={() => window.print()}
+            disabled={!png || isPrinting}
+            onClick={() => print()}
             className="mt-16 rounded-full bg-white p-3 font-semibold leading-4 shadow-2xl transition-colors hover:bg-gray-300 disabled:cursor-not-allowed"
           >
-            <PrintIcon className="h-7 w-7 text-gray-800" />
+            {isPrinting ? (
+              <LoadingIcon className="h-7 w-7 text-gray-400" />
+            ) : (
+              <PrintIcon className="h-7 w-7 text-gray-800" />
+            )}
           </button>
-          {nfc ? (
-            <button
-              disabled={!props.did || isWriting}
-              onClick={() => write()}
-              className="mt-16 rounded-full bg-white p-3 font-semibold leading-4 shadow-2xl transition-colors hover:bg-gray-300 disabled:cursor-not-allowed"
-            >
-              {isWriting ? (
-                <LoadingIcon className="h-7 w-7 text-gray-400" />
-              ) : (
-                <NfcIcon className="h-7 w-7 text-gray-800" />
-              )}
-            </button>
-          ) : null}
         </div>
       </div>
       {width && height && success
