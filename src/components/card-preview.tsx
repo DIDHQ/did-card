@@ -78,15 +78,22 @@ export default function CardPreview(props: {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ url: `https://d.id/${props.did}` }),
           signal: abortController.current.signal,
-        }).then((json) => {
-          if (json.code === 0) {
-            setSuccess(true)
-          } else {
-            setSuccess(false)
-            console.error(json.err)
-            alert(json.err)
-          }
         })
+          .then((json) => {
+            if (json.code === 0) {
+              setSuccess(true)
+            } else {
+              setSuccess(false)
+              console.error(json.err)
+              alert(json.err)
+            }
+          })
+          .catch((err) => {
+            if (err instanceof Error) {
+              console.error(err)
+              alert(err.message)
+            }
+          })
       }
     },
     {
