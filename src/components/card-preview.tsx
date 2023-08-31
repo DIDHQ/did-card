@@ -89,7 +89,7 @@ export default function CardPreview(props: {
             }
           })
           .catch((err) => {
-            if (err instanceof Error) {
+            if (err instanceof Error && err.name !== 'AbortError') {
               console.error(err)
               alert(err.message)
             }
