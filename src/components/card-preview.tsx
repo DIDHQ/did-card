@@ -88,7 +88,11 @@ export default function CardPreview(props: {
           .catch((err) => {
             if (err instanceof Error && err.name !== 'AbortError') {
               console.error(err)
-              alert(err.message)
+              alert(
+                err.message === 'Failed to fetch'
+                  ? 'NFC service not started'
+                  : err.message,
+              )
             }
           })
       }
@@ -97,7 +101,11 @@ export default function CardPreview(props: {
       onError(err) {
         if (err instanceof Error) {
           console.error(err)
-          alert(err.message)
+          alert(
+            err.message === 'Failed to fetch'
+              ? 'NFC service not started'
+              : err.message,
+          )
         }
       },
     },
