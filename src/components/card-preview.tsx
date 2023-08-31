@@ -67,9 +67,6 @@ export default function CardPreview(props: {
       window.print()
 
       if (nfc) {
-        if (!props.did) {
-          throw new Error('no DID selected')
-        }
         setSuccess(false)
         abortController.current?.abort()
         abortController.current = new AbortController()
@@ -179,7 +176,7 @@ export default function CardPreview(props: {
             </button>
           ) : null}
           <button
-            disabled={!png || isPrinting}
+            disabled={!props.did || !png || isPrinting}
             onClick={() => print()}
             className="mt-16 rounded-full bg-white p-3 font-semibold leading-4 shadow-2xl transition-colors hover:bg-gray-300 disabled:cursor-not-allowed"
           >
