@@ -182,7 +182,12 @@ export default function CardPreview(props: {
       </div>
       {width && height && success
         ? createPortal(
-            <Confetti width={width} height={height} recycle={false} />,
+            <Confetti
+              width={width}
+              height={height}
+              recycle={false}
+              className="print:hidden"
+            />,
             document.body,
           )
         : null}
