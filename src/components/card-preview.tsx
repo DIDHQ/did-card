@@ -46,11 +46,10 @@ export default function CardPreview(props: {
     },
   )
   const [success, setSuccess] = useState(false)
+  const abortController = useRef<AbortController>()
   const { trigger: print, isMutating: isPrinting } = useSWRMutation(
     'print',
     async () => {
-      setSuccess(false)
-
       if (nfc) {
         const json = await fetchJSON<{ code: number; err?: string }>(
           `${nfc}/check-status`,
@@ -71,30 +70,24 @@ export default function CardPreview(props: {
         if (!props.did) {
           throw new Error('no DID selected')
         }
-        const json = await fetchJSON<{ code: number; err?: string }>(
-          `${nfc}/write-ntag`,
-          {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ url: `https://d.id/${props.did}` }),
-          },
-        )
-        if (json.code !== 0) {
-          throw new Error(json.err)
-        }
-      }
-    },
-    {
-      onSuccess() {
-        setSuccess(true)
-      },
-      onError(err) {
         setSuccess(false)
-        if (err instanceof Error) {
-          console.error(err)
-          alert(err.message)
-        }
-      },
+        abortController.current?.abort()
+        abortController.current = new AbortController()
+        fetchJSON<{ code: number; err?: string }>(`${nfc}/write-ntag`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ url: `https://d.id/${props.did}` }),
+          signal: abortController.current.signal,
+        }).then((json) => {
+          if (json.code === 0) {
+            setSuccess(true)
+          } else {
+            setSuccess(false)
+            console.error(json.err)
+            alert(json.err)
+          }
+        })
+      }
     },
   )
   const handleFile = useCallback(
