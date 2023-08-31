@@ -89,6 +89,14 @@ export default function CardPreview(props: {
         })
       }
     },
+    {
+      onError(err) {
+        if (err instanceof Error) {
+          console.error(err)
+          alert(err.message)
+        }
+      },
+    },
   )
   const handleFile = useCallback(
     (file?: File) => {
