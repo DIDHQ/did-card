@@ -34,7 +34,7 @@ export default function DIDSearch(props: {
         )}
         <input
           autoFocus
-          placeholder="My DID"
+          placeholder="Enter your DID"
           value={did}
           onChange={(e) => setDid(e.target.value)}
           className="flex-1 bg-transparent p-6 text-4xl font-bold leading-normal text-gray-800 outline-none placeholder:text-gray-400"
