@@ -26,6 +26,7 @@ export async function generateBack(offset: number) {
         width: '100%',
         height: '100%',
         display: 'flex',
+        flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: 'black',
@@ -34,6 +35,12 @@ export async function generateBack(offset: number) {
       <div style={{ color: 'white', fontSize: 128, marginTop: 1900 + offset }}>
         d.id
       </div>
+      <img
+        src="https://did-card-git-nftplay-didhq.vercel.app/nftplay.jpg"
+        alt="nftplay"
+        width={400}
+        style={{ marginTop: 120 }}
+      />
     </div>,
     {
       width: 1960,
