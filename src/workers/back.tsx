@@ -36,7 +36,7 @@ export async function generateBack(offset: number) {
         d.id
       </div>
       <img
-        src="https://did-card-git-nftcard-didhq.vercel.app/nftplay.jpg"
+        src="https://did-card-git-nftplay-didhq.vercel.app/nftplay.jpg"
         alt="nftplay"
         width={400}
         style={{ marginTop: 120 }}
