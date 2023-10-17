@@ -107,25 +107,13 @@ export async function generateFront(did?: string, image?: string) {
           height: 0,
           flex: 1,
           backgroundColor: 'black',
-          paddingTop: 140,
+          paddingTop: 250,
           paddingBottom: 140,
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
         }}
       >
-        <div
-          style={{
-            flexShrink: 0,
-            fontSize: 120,
-            lineHeight: 1,
-            fontWeight: 500,
-            color: '#58595b',
-            marginBottom: 71,
-          }}
-        >
-          I AM
-        </div>
         <img
           src={svgToDataURI(text)}
           alt="did"
