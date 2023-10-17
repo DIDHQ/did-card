@@ -25,7 +25,7 @@ export async function generateFront(did?: string, image?: string) {
   }
 
   const fonts = await Promise.all(
-    ['/Inter-SemiBold.woff', '/Inter-Medium.woff'].map(async (url) => {
+    ['/Poppins-Bold.ttf'].map(async (url) => {
       const response = await fetch(url)
       return response.arrayBuffer()
     }),
@@ -44,7 +44,7 @@ export async function generateFront(did?: string, image?: string) {
     </div>,
     {
       height: 384,
-      fonts: fonts!.map((data) => ({ name: 'Inter', data })),
+      fonts: fonts!.map((data) => ({ name: 'Poppins', data })),
       loadAdditionalAsset: async (code: string, segment: string) => {
         if (code === 'emoji') {
           const url = await new Promise<string>((resolve) =>
@@ -142,7 +142,7 @@ export async function generateFront(did?: string, image?: string) {
     {
       width: 1960,
       height: 3108,
-      fonts: fonts!.map((data) => ({ name: 'Inter', data })),
+      fonts: fonts!.map((data) => ({ name: 'Poppins', data })),
     },
   )
   return svg

@@ -20,7 +20,7 @@ export async function generateBack(offset: number) {
   }
 
   const fonts = await Promise.all(
-    ['/Inter-SemiBold.woff', '/Inter-Medium.woff'].map(async (url) => {
+    ['/Poppins-Bold.ttf'].map(async (url) => {
       const response = await fetch(url)
       return response.arrayBuffer()
     }),
@@ -50,7 +50,7 @@ export async function generateBack(offset: number) {
     {
       width: 1960,
       height: 3108,
-      fonts: fonts!.map((data) => ({ name: 'Inter', data })),
+      fonts: fonts!.map((data) => ({ name: 'Poppins', data })),
     },
   )
   return svg
