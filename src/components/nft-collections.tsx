@@ -7,6 +7,7 @@ const defaultLogos = [
   '/tako.png',
   '/moledao.png',
   '/martr1x.png',
+  '/huawei.png',
 ]
 
 export default function NftCollections(props: {
