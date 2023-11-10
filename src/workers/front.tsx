@@ -100,7 +100,7 @@ export async function generateFront(did?: string, image?: string) {
           src={
             image
               ? await trySvgToDataURI(image)
-              : 'http://localhost:3000/prixpal.png'
+              : 'https://did-card-git-prixpal-didhq.vercel.app/prixpal.png'
           }
           alt="nft"
           style={{
