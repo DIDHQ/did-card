@@ -49,7 +49,7 @@ export async function generateFront(did?: string, image?: string) {
           fontSize: 256,
           lineHeight: 1.5,
           fontWeight: 600,
-          color: '#E1AA1B',
+          color: '#EAAF0A',
         }}
       >
         .PrixPal
