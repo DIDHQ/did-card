@@ -31,16 +31,29 @@ export async function generateFront(did?: string, image?: string) {
     }),
   )
   const text = await satori(
-    <div
-      style={{
-        flexShrink: 0,
-        fontSize: 256,
-        lineHeight: 1.5,
-        fontWeight: 600,
-        color: 'white',
-      }}
-    >
-      {did || '???'}
+    <div style={{ flexShrink: 0, display: 'flex' }}>
+      <div
+        style={{
+          flexShrink: 0,
+          fontSize: 256,
+          lineHeight: 1.5,
+          fontWeight: 600,
+          color: 'white',
+        }}
+      >
+        {did || '???'}
+      </div>
+      <div
+        style={{
+          flexShrink: 0,
+          fontSize: 256,
+          lineHeight: 1.5,
+          fontWeight: 600,
+          color: '#E1AA1B',
+        }}
+      >
+        .PrixPal
+      </div>
     </div>,
     {
       height: 384,
@@ -74,34 +87,31 @@ export async function generateFront(did?: string, image?: string) {
         flexDirection: 'column',
       }}
     >
-      {image ? (
+      <div
+        style={{
+          height: 1960,
+          width: 1960,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
         <img
-          src={await trySvgToDataURI(image)}
+          src={
+            image
+              ? await trySvgToDataURI(image)
+              : 'http://localhost:3000/prixpal.png'
+          }
           alt="nft"
           style={{
-            height: 1960,
-            width: 1960,
+            height: 958,
+            width: 958,
             flexShrink: 0,
             objectFit: 'cover',
+            borderRadius: 32,
           }}
         />
-      ) : (
-        <div
-          style={{
-            height: 1960,
-            width: 1960,
-            flexShrink: 0,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            color: 'white',
-            fontSize: 1024,
-            backgroundColor: '#9ca3af',
-          }}
-        >
-          ?
-        </div>
-      )}
+      </div>
       <div
         style={{
           height: 0,
@@ -126,16 +136,16 @@ export async function generateFront(did?: string, image?: string) {
             display: 'flex',
             width: '100%',
             justifyContent: 'space-between',
-            paddingLeft: 128,
-            paddingRight: 128,
+            paddingLeft: 100,
+            paddingRight: 100,
           }}
         >
           <img
             src={logo}
             alt="logo"
-            style={{ height: 156, width: 440, objectFit: 'cover' }}
+            style={{ height: 128, width: 440, objectFit: 'cover' }}
           />
-          <img src={nfc} alt="nfc" style={{ height: 156, width: 156 }} />
+          <img src={nfc} alt="nfc" style={{ height: 128, width: 128 }} />
         </div>
       </div>
     </div>,

@@ -130,21 +130,19 @@ export default function CardPreview(props: {
       >
         <DidCard front={front} back={back} />
         <div className="flex gap-8">
-          {router.query.upload ? (
-            <button
-              onClick={() => inputRef.current?.click()}
-              className="mt-16 rounded-full bg-white p-3 font-semibold leading-4 shadow-2xl transition-colors hover:bg-gray-300 disabled:cursor-not-allowed"
-            >
-              <input
-                ref={inputRef}
-                type="file"
-                accept="image/png,image/jpg,image/jpeg,image/gif"
-                onChange={(e) => handleFile(e.target.files?.[0])}
-                className="hidden"
-              />
-              <UploadIcon className="h-7 w-7 text-gray-800" />
-            </button>
-          ) : null}
+          <button
+            onClick={() => inputRef.current?.click()}
+            className="mt-16 rounded-full bg-white p-3 font-semibold leading-4 shadow-2xl transition-colors hover:bg-gray-300 disabled:cursor-not-allowed"
+          >
+            <input
+              ref={inputRef}
+              type="file"
+              accept="image/png,image/jpg,image/jpeg,image/gif"
+              onChange={(e) => handleFile(e.target.files?.[0])}
+              className="hidden"
+            />
+            <UploadIcon className="h-7 w-7 text-gray-800" />
+          </button>
           {router.query.download ? (
             <button
               disabled={!png || isDownloading}
