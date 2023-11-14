@@ -94,6 +94,7 @@ export async function generateFront(did?: string, image?: string) {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
+          backgroundColor: 'black',
         }}
       >
         <img
@@ -143,9 +144,13 @@ export async function generateFront(did?: string, image?: string) {
           <img
             src={logo}
             alt="logo"
-            style={{ height: 128, width: 440, objectFit: 'cover' }}
+            style={{ height: 128, width: 440, objectFit: 'contain' }}
           />
-          <img src={nfc} alt="nfc" style={{ height: 128, width: 128 }} />
+          <img
+            src={nfc}
+            alt="nfc"
+            style={{ height: 128, width: 128, objectFit: 'contain' }}
+          />
         </div>
       </div>
     </div>,
