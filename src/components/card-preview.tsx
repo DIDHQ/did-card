@@ -18,7 +18,6 @@ import ParallaxStars from './parallax-stars'
  */
 export default function CardPreview(props: {
   did: string
-  image: string
   front?: string
   back?: string
   png?: string

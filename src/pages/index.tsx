@@ -19,6 +19,8 @@ const CardPreview = dynamic(() => import('@/components/card-preview'), {
 
 export default function IndexPage() {
   const [did, setDid] = useState('')
+  const [tag, setTag] = useState('')
+  const [title, setTitle] = useState('')
   const [image, setImage] = useState('')
   useEffect(() => {
     if (!did) {
@@ -45,12 +47,12 @@ export default function IndexPage() {
   const offset = typeof router.query.offset === 'string' ? Number.parseInt(router.query.offset) : 0
 
   const { data: front } = useSWR(
-    ['front', did, image],
+    ['front', did, tag, title, image],
     () => {
       if (!frontRef.current) {
         throw new Error()
       }
-      return frontRef.current.call(frontRef.current, did, image)
+      return frontRef.current.call(frontRef.current, did, tag, title, image)
     },
     { revalidateOnFocus: false, errorRetryInterval: 1000 },
   )
@@ -85,10 +87,15 @@ export default function IndexPage() {
         <link rel='icon' href={image || '/favicon.png'} />
       </Head>
       <Allotment minSize={320} className='h-screen w-screen print:hidden'>
-        <DIDSearch setDid={setDid} setImage={setImage} className='h-full w-full' />
+        <DIDSearch
+          setDid={setDid}
+          setTag={setTag}
+          setTitle={setTitle}
+          setImage={setImage}
+          className='h-full w-full'
+        />
         <CardPreview
           did={did}
-          image={image}
           front={front}
           back={back}
           png={png}
