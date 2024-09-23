@@ -1,6 +1,6 @@
-import { useCallback, useEffect, useMemo, useRef } from 'react'
-import { useMeasure } from '@uidotdev/usehooks'
 import { createStars, updateStar, updateStars } from '@/utils/star'
+import { useMeasure } from '@uidotdev/usehooks'
+import { useCallback, useEffect, useMemo, useRef } from 'react'
 
 /**
  * @see https://github.com/nikpundik/react-astrum/blob/master/src/index.js
@@ -16,10 +16,7 @@ export default function ParallaxStars(props: {
   const [ref, { width, height }] = useMeasure<HTMLCanvasElement>()
   const requestRef = useRef<number>()
   const stars = useMemo(
-    () =>
-      width && height
-        ? createStars(props.stars, width, height, props.speed, props.down)
-        : [],
+    () => (width && height ? createStars(props.stars, width, height, props.speed, props.down) : []),
     [props.down, props.speed, props.stars, height, width],
   )
   const tick = useCallback(() => {
@@ -29,13 +26,13 @@ export default function ParallaxStars(props: {
     }
     ctx.clearRect(0, 0, width, height)
     ctx.fillStyle = props.color
-    stars.forEach((star) => {
+    for (const star of stars) {
       if (props.sparkle) {
         ctx.globalAlpha = Math.random()
       }
       ctx.fillRect(star.x, star.y, star.w, star.w)
       updateStar(star, height)
-    })
+    }
     requestRef.current = requestAnimationFrame(tick)
   }, [height, props.color, props.sparkle, ref, stars, width])
   useEffect(() => {

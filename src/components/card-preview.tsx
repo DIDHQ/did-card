@@ -1,23 +1,17 @@
-import clsx from 'clsx'
-import useSWRMutation from 'swr/mutation'
-import { useCallback, useRef, useState } from 'react'
-import { useAtomValue } from 'jotai'
-import { useRouter } from 'next/router'
-import { useWindowSize } from '@uidotdev/usehooks'
-import Confetti from 'react-confetti'
-import { createPortal } from 'react-dom'
-import DidCard from './did-card'
-import {
-  DownloadIcon,
-  LoadingIcon,
-  NfcIcon,
-  PrintIcon,
-  UploadIcon,
-} from './icon'
-import ParallaxStars from './parallax-stars'
+import useBeep from '@/hooks/use-beep'
 import { flippedAtom } from '@/utils/atom'
 import { fetchJSON } from '@/utils/fetch'
-import useBeep from '@/hooks/use-beep'
+import { useWindowSize } from '@uidotdev/usehooks'
+import clsx from 'clsx'
+import { useAtomValue } from 'jotai'
+import { useRouter } from 'next/router'
+import { useCallback, useRef, useState } from 'react'
+import Confetti from 'react-confetti'
+import { createPortal } from 'react-dom'
+import useSWRMutation from 'swr/mutation'
+import DidCard from './did-card'
+import { DownloadIcon, LoadingIcon, NfcIcon, PrintIcon, UploadIcon } from './icon'
+import ParallaxStars from './parallax-stars'
 
 /**
  * @see https://fjolt.com/article/css-3d-interactive-flippable-cards
@@ -39,20 +33,17 @@ export default function CardPreview(props: {
   const beep = useBeep()
   const flipped = useAtomValue(flippedAtom)
   const inputRef = useRef<HTMLInputElement>(null)
-  const { trigger: download, isMutating: isDownloading } = useSWRMutation(
-    'download',
-    async () => {
-      if (!png) {
-        return
-      }
+  const { trigger: download, isMutating: isDownloading } = useSWRMutation('download', async () => {
+    if (!png) {
+      return
+    }
 
-      const anchor = document.createElement('a')
-      anchor.setAttribute('download', flipped ? 'back.png' : `${props.did}.png`)
-      anchor.href = png
-      anchor.setAttribute('target', '_blank')
-      anchor.click()
-    },
-  )
+    const anchor = document.createElement('a')
+    anchor.setAttribute('download', flipped ? 'back.png' : `${props.did}.png`)
+    anchor.href = png
+    anchor.setAttribute('target', '_blank')
+    anchor.click()
+  })
   const [success, setSuccess] = useState(false)
   const { trigger: write, isMutating: isWriting } = useSWRMutation(
     'write',
@@ -119,8 +110,8 @@ export default function CardPreview(props: {
       <ParallaxStars
         stars={100}
         speed={0.3}
-        color="#ffffff"
-        className="h-full w-full bg-gradient"
+        color='#ffffff'
+        className='h-full w-full bg-gradient'
       />
       <div
         className={clsx(
@@ -129,52 +120,56 @@ export default function CardPreview(props: {
         )}
       >
         <DidCard front={front} back={back} />
-        <div className="flex gap-8">
+        <div className='flex gap-8'>
           {router.query.upload ? (
             <button
+              type='button'
               onClick={() => inputRef.current?.click()}
-              className="mt-16 rounded-full bg-white p-3 font-semibold leading-4 shadow-2xl transition-colors hover:bg-gray-300 disabled:cursor-not-allowed"
+              className='mt-16 rounded-full bg-white p-3 font-semibold leading-4 shadow-2xl transition-colors hover:bg-gray-300 disabled:cursor-not-allowed'
             >
               <input
                 ref={inputRef}
-                type="file"
-                accept="image/png,image/jpg,image/jpeg,image/gif"
+                type='file'
+                accept='image/png,image/jpg,image/jpeg,image/gif'
                 onChange={(e) => handleFile(e.target.files?.[0])}
-                className="hidden"
+                className='hidden'
               />
-              <UploadIcon className="h-7 w-7 text-gray-800" />
+              <UploadIcon className='h-7 w-7 text-gray-800' />
             </button>
           ) : null}
           {router.query.download ? (
             <button
+              type='button'
               disabled={!png || isDownloading}
               onClick={() => download()}
-              className="mt-16 rounded-full bg-white p-3 font-semibold leading-4 shadow-2xl transition-colors hover:bg-gray-300 disabled:cursor-not-allowed"
+              className='mt-16 rounded-full bg-white p-3 font-semibold leading-4 shadow-2xl transition-colors hover:bg-gray-300 disabled:cursor-not-allowed'
             >
               {isDownloading ? (
-                <LoadingIcon className="h-7 w-7 text-gray-400" />
+                <LoadingIcon className='h-7 w-7 text-gray-400' />
               ) : (
-                <DownloadIcon className="h-7 w-7 text-gray-800" />
+                <DownloadIcon className='h-7 w-7 text-gray-800' />
               )}
             </button>
           ) : null}
           <button
+            type='button'
             disabled={!png}
             onClick={() => window.print()}
-            className="mt-16 rounded-full bg-white p-3 font-semibold leading-4 shadow-2xl transition-colors hover:bg-gray-300 disabled:cursor-not-allowed"
+            className='mt-16 rounded-full bg-white p-3 font-semibold leading-4 shadow-2xl transition-colors hover:bg-gray-300 disabled:cursor-not-allowed'
           >
-            <PrintIcon className="h-7 w-7 text-gray-800" />
+            <PrintIcon className='h-7 w-7 text-gray-800' />
           </button>
           {nfc ? (
             <button
+              type='button'
               disabled={!props.did || isWriting}
               onClick={() => write()}
-              className="mt-16 rounded-full bg-white p-3 font-semibold leading-4 shadow-2xl transition-colors hover:bg-gray-300 disabled:cursor-not-allowed"
+              className='mt-16 rounded-full bg-white p-3 font-semibold leading-4 shadow-2xl transition-colors hover:bg-gray-300 disabled:cursor-not-allowed'
             >
               {isWriting ? (
-                <LoadingIcon className="h-7 w-7 text-gray-400" />
+                <LoadingIcon className='h-7 w-7 text-gray-400' />
               ) : (
-                <NfcIcon className="h-7 w-7 text-gray-800" />
+                <NfcIcon className='h-7 w-7 text-gray-800' />
               )}
             </button>
           ) : null}
@@ -182,12 +177,7 @@ export default function CardPreview(props: {
       </div>
       {width && height && success
         ? createPortal(
-            <Confetti
-              width={width}
-              height={height}
-              recycle={false}
-              className="print:hidden"
-            />,
+            <Confetti width={width} height={height} recycle={false} className='print:hidden' />,
             document.body,
           )
         : null}

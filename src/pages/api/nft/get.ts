@@ -1,7 +1,7 @@
-import { NextRequest, NextResponse } from 'next/server'
-import { createPublicClient, http, isAddress, parseAbi } from 'viem'
-import { fetchJSON } from '@/utils/fetch'
 import { rpcUrls } from '@/utils/chain'
+import { fetchJSON } from '@/utils/fetch'
+import { type NextRequest, NextResponse } from 'next/server'
+import { http, createPublicClient, isAddress, parseAbi } from 'viem'
 
 export const runtime = 'edge'
 

@@ -1,7 +1,7 @@
-import { createPublicClient, http, labelhash, namehash, parseAbi } from 'viem'
+import { compact, uniq } from 'remeda'
+import { http, createPublicClient, labelhash, namehash, parseAbi } from 'viem'
 import { mainnet } from 'viem/chains'
 import { normalize } from 'viem/ens'
-import { compact, uniq } from 'remeda'
 import { fetchJSON } from './fetch'
 
 const publicClient = createPublicClient({
@@ -20,9 +20,7 @@ function normalizeAddress(address: string): string {
   return address.toLowerCase()
 }
 
-const ensNameWrapper = normalizeAddress(
-  '0xD4416b13d2b3a9aBae7AcD5D6C2BbDBE25686401',
-)
+const ensNameWrapper = normalizeAddress('0xD4416b13d2b3a9aBae7AcD5D6C2BbDBE25686401')
 
 function guessDidSystem(didOrAddress: string): DidSystem | null {
   if (didOrAddress.endsWith('.eth')) {
@@ -31,10 +29,7 @@ function guessDidSystem(didOrAddress: string): DidSystem | null {
   if (didOrAddress.endsWith('.lens')) {
     return DidSystem.LENS
   }
-  if (
-    didOrAddress.endsWith('.bit') ||
-    /^[^\s\.]+\.[^\s\.]+$/.test(didOrAddress)
-  ) {
+  if (didOrAddress.endsWith('.bit') || /^[^\s\.]+\.[^\s\.]+$/.test(didOrAddress)) {
     return DidSystem.BIT
   }
   return null
@@ -129,10 +124,7 @@ async function getBitAccountReverseAddresses(did: string): Promise<string[]> {
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify({ account: did }),
     })
-    return (
-      json.data?.list.map(({ key_info: { key } }) => normalizeAddress(key)) ??
-      []
-    )
+    return json.data?.list.map(({ key_info: { key } }) => normalizeAddress(key)) ?? []
   } catch (err) {
     console.error('getBitAccountReverseAddresses', did, err)
     return []
@@ -147,9 +139,7 @@ export async function getRelatedAddresses(did: string): Promise<string[]> {
       getEnsOwner(did),
       getEnsAddress(did),
     ])
-    return uniq(compact([manager, owner, address])).filter(
-      (address) => address !== ensNameWrapper,
-    )
+    return uniq(compact([manager, owner, address])).filter((address) => address !== ensNameWrapper)
   }
   if (didSystem === DidSystem.LENS) {
     const address = await getEnsAddress(`${did}.xyz`)

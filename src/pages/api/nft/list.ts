@@ -1,9 +1,9 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { supportedChains } from '@/utils/chain'
+import { fetchJSON } from '@/utils/fetch'
+import type { Collection } from '@/utils/type'
+import { type NextRequest, NextResponse } from 'next/server'
 import { sortBy } from 'remeda'
 import { isAddress } from 'viem'
-import { supportedChains } from '@/utils/chain'
-import { Collection } from '@/utils/type'
-import { fetchJSON } from '@/utils/fetch'
 
 export const runtime = 'edge'
 
@@ -20,10 +20,7 @@ export default async function handler(req: NextRequest) {
   return NextResponse.json(json)
 }
 
-async function simpleHash(
-  addresses: string[],
-  apiKey?: string,
-): Promise<Collection[]> {
+async function simpleHash(addresses: string[], apiKey?: string): Promise<Collection[]> {
   const json = await fetchJSON<{
     collections: {
       name: string | null
@@ -63,15 +60,14 @@ async function simpleHash(
     ),
     [
       (collection) =>
-        collection.top_contracts?.[0] ===
-        'ethereum.0xb47e3cd837ddf8e4c57f05d70ab865de6e193bbb'
-          ? Infinity
+        collection.top_contracts?.[0] === 'ethereum.0xb47e3cd837ddf8e4c57f05d70ab865de6e193bbb'
+          ? Number.POSITIVE_INFINITY
           : (collection.top_bids?.[0]?.value ?? 0) *
             (collection.top_bids?.[0]?.payment_token.symbol.endsWith('ETH')
               ? 1000
               : collection.top_bids?.[0]?.payment_token.symbol.endsWith('BNB')
-              ? 100
-              : 1),
+                ? 100
+                : 1),
       'desc',
     ],
   ) as Collection[]

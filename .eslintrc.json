@@ -1,11 +1,6 @@
 {
-  "extends": [
-    "next/core-web-vitals",
-    "plugin:tailwindcss/recommended",
-    "plugin:import/recommended"
-  ],
+  "extends": ["next/core-web-vitals", "plugin:tailwindcss/recommended"],
   "rules": {
-    "import/order": "warn",
     "@next/next/no-img-element": "off"
   }
 }

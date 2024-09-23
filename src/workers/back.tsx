@@ -1,7 +1,7 @@
+import { svgToDataURI } from '@/utils/svg'
 import { expose } from 'comlink'
 import satori, { init } from 'satori/wasm'
 import initYoga from 'yoga-wasm-web'
-import { svgToDataURI } from '@/utils/svg'
 
 let initialized = false
 
@@ -11,9 +11,9 @@ export const logo = svgToDataURI(
 
 export async function generateBack(offset: number) {
   if (!initialized) {
-    const wasm = await fetch(
-      new URL('yoga-wasm-web/dist/yoga.wasm', import.meta.url),
-    ).then((res) => res.arrayBuffer())
+    const wasm = await fetch(new URL('yoga-wasm-web/dist/yoga.wasm', import.meta.url)).then((res) =>
+      res.arrayBuffer(),
+    )
     const yoga = await initYoga(wasm)
     init(yoga)
     initialized = true
@@ -38,7 +38,7 @@ export async function generateBack(offset: number) {
     >
       <img
         src={logo}
-        alt="logo"
+        alt='logo'
         style={{
           height: 156,
           width: 440,
@@ -50,7 +50,7 @@ export async function generateBack(offset: number) {
     {
       width: 1960,
       height: 3108,
-      fonts: fonts!.map((data) => ({ name: 'Poppins', data })),
+      fonts: fonts?.map((data) => ({ name: 'Poppins', data })),
     },
   )
   return svg

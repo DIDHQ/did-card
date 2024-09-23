@@ -13,7 +13,7 @@ export default function useBeep() {
   return useMemo(() => {
     const context = new AudioContext()
 
-    const play = function () {
+    const play = () => {
       const currentTime = context.currentTime
       const osc = context.createOscillator()
       const gain = context.createGain()
@@ -22,12 +22,9 @@ export default function useBeep() {
       gain.connect(context.destination)
 
       gain.gain.setValueAtTime(gain.gain.value, currentTime)
-      gain.gain.exponentialRampToValueAtTime(
-        RAMP_VALUE,
-        currentTime + RAMP_DURATION,
-      )
+      gain.gain.exponentialRampToValueAtTime(RAMP_VALUE, currentTime + RAMP_DURATION)
 
-      osc.onended = function () {
+      osc.onended = () => {
         gain.disconnect(context.destination)
         osc.disconnect(gain)
       }
@@ -38,14 +35,15 @@ export default function useBeep() {
       osc.stop(currentTime + RAMP_DURATION)
     }
 
-    const beep = function (times: number = 1) {
+    const beep = (times = 1) => {
       ;(function loop(i) {
         play()
+        // biome-ignore lint/style/noParameterAssign: <explanation>
         if (++i < times) setTimeout(loop, INTERVAL, i)
       })(0)
     }
 
-    beep.destroy = function () {
+    beep.destroy = () => {
       context.close()
     }
 

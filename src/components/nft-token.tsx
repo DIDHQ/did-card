@@ -1,10 +1,10 @@
+import { reservoirs } from '@/utils/chain'
+import { useCallback, useState } from 'react'
 import {
   LazyLoadImage,
-  ScrollPosition,
+  type ScrollPosition,
   trackWindowScroll,
 } from 'react-lazy-load-image-component'
-import { useCallback, useState } from 'react'
-import { reservoirs } from '@/utils/chain'
 
 function nftId2Image(nftId: string): string | undefined {
   const [chain, contract, token] = nftId.split('.')
@@ -38,10 +38,10 @@ export default trackWindowScroll(function NftToken(props: {
       scrollPosition={props.scrollPosition}
       onError={handleError}
       onClick={handleClick}
-      wrapperClassName="block h-32 w-32"
-      className="h-32 w-32 cursor-pointer rounded-xl bg-gray-50 object-cover ring-gray-200 transition-shadow hover:ring"
+      wrapperClassName='block h-32 w-32'
+      className='h-32 w-32 cursor-pointer rounded-xl bg-gray-50 object-cover ring-gray-200 transition-shadow hover:ring'
     />
   ) : (
-    <div className="h-32 w-32 cursor-not-allowed rounded-xl bg-gray-50" />
+    <div className='h-32 w-32 cursor-not-allowed rounded-xl bg-gray-50' />
   )
 })

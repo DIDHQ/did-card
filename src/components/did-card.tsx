@@ -1,9 +1,9 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import clsx from 'clsx'
-import { useAtom } from 'jotai'
-import { LoadingIcon } from './icon'
 import { flippedAtom } from '@/utils/atom'
 import { svgToDataURI } from '@/utils/svg'
+import clsx from 'clsx'
+import { useAtom } from 'jotai'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { LoadingIcon } from './icon'
 
 export default function DidCard(props: {
   front?: string
@@ -25,7 +25,7 @@ export default function DidCard(props: {
       return
     }
 
-    const dropShadowColor = `rgba(0, 0, 0, 0.3)`
+    const dropShadowColor = 'rgba(0, 0, 0, 0.3)'
 
     setAnimated(true)
     // Get the x position of the users mouse, relative to the button itself
@@ -71,12 +71,12 @@ export default function DidCard(props: {
       return
     }
 
-    const dropShadowColor = `rgba(0, 0, 0, 0.3)`
+    const dropShadowColor = 'rgba(0, 0, 0, 0.3)'
     setAnimated(false)
-    front.style.transform = `rotateY(0deg) rotateX(0deg) scale(1)`
+    front.style.transform = 'rotateY(0deg) rotateX(0deg) scale(1)'
     back.style.transform = flipped
-      ? `rotateY(0deg) rotateX(0deg) scale(1.01) translateZ(-4px)`
-      : `rotateY(0deg) rotateX(0deg) scale(1) translateZ(-4px)`
+      ? 'rotateY(0deg) rotateX(0deg) scale(1.01) translateZ(-4px)'
+      : 'rotateY(0deg) rotateX(0deg) scale(1) translateZ(-4px)'
     front.style.filter = `drop-shadow(0 10px 15px ${dropShadowColor})`
   }, [flipped])
   useEffect(() => {
@@ -95,6 +95,7 @@ export default function DidCard(props: {
       parent?.removeEventListener('mouseleave', resetAngel)
     }
   }, [calculateAngle, flipped, resetAngel])
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
     setFlipped(false)
   }, [props.front, setFlipped])
@@ -102,12 +103,10 @@ export default function DidCard(props: {
     () => (props.front ? `url(${svgToDataURI(props.front)})` : undefined),
     [props.front],
   )
-  const backImage = useMemo(
-    () => (props.back ? svgToDataURI(props.back) : undefined),
-    [props.back],
-  )
+  const backImage = useMemo(() => (props.back ? svgToDataURI(props.back) : undefined), [props.back])
 
   return (
+    // biome-ignore lint/a11y/useKeyWithClickEvents: <explanation>
     <div
       ref={cardRef}
       onClick={(e) => {
@@ -133,10 +132,10 @@ export default function DidCard(props: {
           transform: 'rotateX(0) rotateY(0deg) scale(1) translateZ(-4px)',
           background: 'black',
         }}
-        className="absolute inset-0 h-full w-full overflow-hidden rounded-[12.5pt] transition-all duration-150 ease-out"
+        className='absolute inset-0 h-full w-full overflow-hidden rounded-[12.5pt] transition-all duration-150 ease-out'
       >
-        <div style={{ transform: 'rotateY(180deg)' }} className="h-full w-full">
-          <img src={backImage} alt="back" className="h-full w-full" />
+        <div style={{ transform: 'rotateY(180deg)' }} className='h-full w-full'>
+          <img src={backImage} alt='back' className='h-full w-full' />
         </div>
       </div>
 
@@ -150,21 +149,20 @@ export default function DidCard(props: {
           backgroundImage: frontImage,
           backgroundPosition: '50% 50%',
         }}
-        className="h-full w-full overflow-hidden rounded-[12.5pt] bg-black bg-cover object-cover transition-all duration-150 ease-out"
+        className='h-full w-full overflow-hidden rounded-[12.5pt] bg-black bg-cover object-cover transition-all duration-150 ease-out'
       >
         {frontImage ? (
           <div
             ref={glareRef}
             style={{
               opacity: animated ? 0.3 : 0,
-              background:
-                'radial-gradient(circle at 50% 50%, rgb(199 198 243), transparent)',
+              background: 'radial-gradient(circle at 50% 50%, rgb(199 198 243), transparent)',
             }}
-            className="pointer-events-none absolute inset-0 z-50 h-full w-full rounded-[12.5pt] mix-blend-hard-light transition-all duration-100 ease-out"
+            className='pointer-events-none absolute inset-0 z-50 h-full w-full rounded-[12.5pt] mix-blend-hard-light transition-all duration-100 ease-out'
           />
         ) : (
-          <div className="flex h-[212.5pt] w-full items-center justify-center bg-gray-400">
-            <LoadingIcon className="h-24 w-24 text-white" />
+          <div className='flex h-[212.5pt] w-full items-center justify-center bg-gray-400'>
+            <LoadingIcon className='h-24 w-24 text-white' />
           </div>
         )}
       </div>

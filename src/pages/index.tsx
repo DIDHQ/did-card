@@ -1,20 +1,20 @@
-import { useEffect, useRef, useState } from 'react'
-import { Allotment } from 'allotment'
-import dynamic from 'next/dynamic'
-import useSWR from 'swr'
-import { wrap } from 'comlink'
-import { useRouter } from 'next/router'
-import { useAtomValue } from 'jotai'
-import Head from 'next/head'
 import DIDSearch from '@/components/did-search'
-import type { generateFront } from '@/workers/front'
-import type { generateBack } from '@/workers/back'
-import type { convertToPng } from '@/workers/png'
 import { flippedAtom } from '@/utils/atom'
+import type { generateBack } from '@/workers/back'
+import type { generateFront } from '@/workers/front'
+import type { convertToPng } from '@/workers/png'
+import { Allotment } from 'allotment'
+import { wrap } from 'comlink'
+import { useAtomValue } from 'jotai'
+import dynamic from 'next/dynamic'
+import Head from 'next/head'
+import { useRouter } from 'next/router'
+import { useEffect, useRef, useState } from 'react'
+import useSWR from 'swr'
 
 const CardPreview = dynamic(() => import('@/components/card-preview'), {
   ssr: false,
-  loading: () => <div className="h-full w-full bg-gradient" />,
+  loading: () => <div className='h-full w-full bg-gradient' />,
 })
 
 export default function IndexPage() {
@@ -42,8 +42,7 @@ export default function IndexPage() {
   }, [])
 
   const router = useRouter()
-  const offset =
-    typeof router.query.offset === 'string' ? parseInt(router.query.offset) : 0
+  const offset = typeof router.query.offset === 'string' ? Number.parseInt(router.query.offset) : 0
 
   const { data: front } = useSWR(
     ['front', did, image],
@@ -73,6 +72,7 @@ export default function IndexPage() {
       if (!pngRef.current) {
         throw new Error()
       }
+      // biome-ignore lint/style/noNonNullAssertion: <explanation>
       return pngRef.current.call(pngRef.current, svg!)
     },
     { revalidateOnFocus: false, errorRetryInterval: 1000 },
@@ -82,14 +82,10 @@ export default function IndexPage() {
     <>
       <Head>
         <title>{did ? `${did}'s DID Card` : 'DID Card'}</title>
-        <link rel="icon" href={image || '/favicon.png'} />
+        <link rel='icon' href={image || '/favicon.png'} />
       </Head>
-      <Allotment minSize={320} className="h-screen w-screen print:hidden">
-        <DIDSearch
-          setDid={setDid}
-          setImage={setImage}
-          className="h-full w-full"
-        />
+      <Allotment minSize={320} className='h-screen w-screen print:hidden'>
+        <DIDSearch setDid={setDid} setImage={setImage} className='h-full w-full' />
         <CardPreview
           did={did}
           image={image}
@@ -98,17 +94,17 @@ export default function IndexPage() {
           png={png}
           onDidChange={setDid}
           onImageChange={setImage}
-          className="h-full w-full"
+          className='h-full w-full'
         />
       </Allotment>
-      <div className="hidden h-[100vh] w-[100vw] overflow-hidden print:block">
+      <div className='hidden h-[100vh] w-[100vw] overflow-hidden print:block'>
         <img
           src={png}
-          alt="print"
+          alt='print'
           style={{
             transform: 'rotate(90deg) translateY(-100%)',
           }}
-          className="h-[100vw] w-[100vh] origin-top-left object-cover"
+          className='h-[100vw] w-[100vh] origin-top-left object-cover'
         />
       </div>
     </>
