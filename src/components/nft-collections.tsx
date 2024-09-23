@@ -2,7 +2,14 @@ import type { Collection } from '@/utils/type'
 import { GroupedVirtuoso } from 'react-virtuoso'
 import NftToken from './nft-token'
 
-const defaultLogos = ['/favicon.png', '/tako.png', '/moledao.png', '/martr1x.png', '/huawei.png']
+const defaultLogos = [
+  '/favicon.png',
+  '/shanhaiwoo.png',
+  '/tako.png',
+  '/moledao.png',
+  '/martr1x.png',
+  '/huawei.png',
+]
 
 export default function NftCollections(props: {
   collections?: Collection[]
