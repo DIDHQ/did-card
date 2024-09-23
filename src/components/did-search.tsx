@@ -45,7 +45,15 @@ export default function DIDSearch(props: {
         <input
           placeholder='Community Tag'
           value={tag}
-          onChange={(e) => setTag(e.target.value)}
+          onChange={(e) =>
+            setTag(
+              e.target.value === '1'
+                ? 'shanhaiwoo'
+                : e.target.value === '2'
+                  ? 'invisiblegarden'
+                  : e.target.value,
+            )
+          }
           onBlur={() => props.setTag(tag)}
           className='flex-1 bg-transparent p-6 text-4xl font-bold leading-normal text-gray-800 outline-none placeholder:text-gray-400'
         />
