@@ -5,10 +5,16 @@ import NftToken from './nft-token'
 const defaultLogos = [
   '/favicon.png',
   '/shanhaiwoo.png',
-  '/tako.png',
-  '/moledao.png',
-  '/martr1x.png',
-  '/huawei.png',
+  '/invisible-garden-1.png',
+  '/invisible-garden-2.png',
+  '/invisible-garden-3.png',
+  '/invisible-garden-4.png',
+  '/invisible-garden-5.png',
+  '/invisible-garden-6.png',
+  // '/tako.png',
+  // '/moledao.png',
+  // '/martr1x.png',
+  // '/huawei.png',
 ]
 
 export default function NftCollections(props: {
