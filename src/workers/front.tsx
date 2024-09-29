@@ -105,8 +105,8 @@ export async function generateFront(did?: string, tag?: string, title?: string, 
           height: 0,
           flex: 1,
           backgroundColor: 'black',
-          paddingTop: title ? 100 : 250,
-          paddingBottom: 128,
+          paddingTop: title ? 100 : 220,
+          paddingBottom: 144,
           paddingRight: 28,
           display: 'flex',
           flexDirection: 'column',
@@ -154,8 +154,8 @@ export async function generateFront(did?: string, tag?: string, title?: string, 
             paddingRight: 128,
           }}
         >
-          <img src={logo} alt='logo' style={{ height: 128, width: 128, objectFit: 'cover' }} />
-          <img src={nfc} alt='nfc' style={{ height: 128, width: 128 }} />
+          <img src={logo} alt='logo' style={{ height: 128, width: 128, objectFit: 'contain' }} />
+          <img src={nfc} alt='nfc' style={{ height: 128, width: 128, objectFit: 'contain' }} />
         </div>
       </div>
     </div>,
