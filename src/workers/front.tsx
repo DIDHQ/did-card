@@ -124,7 +124,7 @@ export async function generateFront(did?: string, tag?: string, title?: string, 
             fontSize: 128,
             lineHeight: 1.5,
             fontWeight: 600,
-            color: '#00DF9B',
+            color: '#5cb531',
           }}
         >
           {`#${tag}`}
