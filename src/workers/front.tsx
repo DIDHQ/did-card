@@ -106,7 +106,8 @@ export async function generateFront(did?: string, tag?: string, title?: string, 
           flex: 1,
           backgroundColor: 'black',
           paddingTop: title ? 100 : 250,
-          paddingBottom: 100,
+          paddingBottom: 128,
+          paddingRight: 28,
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
@@ -150,7 +151,7 @@ export async function generateFront(did?: string, tag?: string, title?: string, 
             width: '100%',
             justifyContent: 'space-between',
             paddingLeft: 100,
-            paddingRight: 100,
+            paddingRight: 128,
           }}
         >
           <img src={logo} alt='logo' style={{ height: 128, width: 128, objectFit: 'cover' }} />
