@@ -4,7 +4,7 @@ import { fetchJSON } from '@/utils/fetch'
 import type { Collection } from '@/utils/type'
 import clsx from 'clsx'
 import { useSetAtom } from 'jotai'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import useSWR from 'swr'
 import { LoadingIcon, SearchIcon } from './icon'
 import NftCollections from './nft-collections'
@@ -25,6 +25,13 @@ export default function DIDSearch(props: {
     () => fetchJSON<Collection[]>(`/api/nft/list?addresses=${addresses?.join(',')}`),
     { revalidateOnFocus: false },
   )
+  useEffect(() => {
+    if (!did) {
+      setImage('')
+      setTag('')
+      setRole('')
+    }
+  }, [did, setImage])
 
   return (
     <div className={clsx('flex h-full flex-col', props.className)}>

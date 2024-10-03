@@ -14,7 +14,7 @@ import type { generateFront } from '@/workers/front'
 import type { convertToPng } from '@/workers/png'
 import { Allotment } from 'allotment'
 import { wrap } from 'comlink'
-import { useAtom, useAtomValue } from 'jotai'
+import { useAtomValue } from 'jotai'
 import dynamic from 'next/dynamic'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
@@ -28,20 +28,13 @@ const CardPreview = dynamic(() => import('@/components/card-preview'), {
 
 export default function IndexPage() {
   const flipped = useAtomValue(flippedAtom)
-  const [image, setImage] = useAtom(imageAtom)
+  const image = useAtomValue(imageAtom)
   const did = useAtomValue(didAtom)
-  const [tag, setTag] = useAtom(tagAtom)
-  const [role, setRole] = useAtom(roleAtom)
+  const tag = useAtomValue(tagAtom)
+  const role = useAtomValue(roleAtom)
   const didColor = useAtomValue(didColorAtom)
   const tagColor = useAtomValue(tagColorAtom)
   const roleColor = useAtomValue(roleColorAtom)
-  useEffect(() => {
-    if (!did) {
-      setImage('')
-      setTag('')
-      setRole('')
-    }
-  }, [did, setImage, setTag, setRole])
 
   const frontRef = useRef<typeof generateFront>()
   const backRef = useRef<typeof generateBack>()
