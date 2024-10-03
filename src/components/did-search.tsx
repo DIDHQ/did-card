@@ -11,7 +11,7 @@ import {
 import { fetchJSON } from '@/utils/fetch'
 import type { Collection } from '@/utils/type'
 import clsx from 'clsx'
-import { useAtom, useSetAtom } from 'jotai'
+import { useSetAtom } from 'jotai'
 import { useEffect, useState } from 'react'
 import useSWR from 'swr'
 import { LoadingIcon, SearchIcon } from './icon'
