@@ -10,39 +10,37 @@
     "format": "biome check --write ."
   },
   "dependencies": {
-    "@resvg/resvg-wasm": "^2.5.0",
-    "@uidotdev/usehooks": "^2.4.0",
-    "allotment": "^1.19.3",
-    "clsx": "^2.0.0",
+    "@resvg/resvg-wasm": "^2.6.2",
+    "@uidotdev/usehooks": "^2.4.1",
+    "allotment": "^1.20.2",
+    "clsx": "^2.1.1",
     "comlink": "^4.4.1",
-    "jotai": "^2.4.3",
-    "next": "^13.5.5",
-    "react": "^18.2.0",
+    "jotai": "^2.10.0",
+    "next": "^14.2.14",
+    "react": "^18.3.1",
     "react-confetti": "^6.1.0",
-    "react-dom": "^18.2.0",
-    "react-lazy-load-image-component": "^1.6.0",
-    "react-virtuoso": "^4.6.2",
-    "remeda": "^1.27.1",
-    "satori": "^0.10.9",
-    "swr": "^2.2.4",
-    "tailwindcss": "^3.3.3",
+    "react-dom": "^18.3.1",
+    "react-lazy-load-image-component": "^1.6.2",
+    "react-virtuoso": "^4.10.4",
+    "remeda": "^2.14.0",
+    "satori": "^0.11.1",
+    "swr": "^2.2.5",
+    "tailwindcss": "^3.4.13",
     "twemoji": "^14.0.2",
-    "viem": "^1.16.6",
+    "viem": "^2.21.17",
     "yoga-wasm-web": "^0.3.3"
   },
   "devDependencies": {
-    "@biomejs/biome": "^1.9.2",
-    "@types/node": "^20.8.6",
-    "@types/react": "^18.2.28",
-    "@types/react-dom": "^18.2.13",
-    "@types/react-lazy-load-image-component": "^1.6.1",
-    "@types/twemoji": "^13.1.2",
-    "autoprefixer": "^10.4.16",
-    "eslint": "^8.51.0",
-    "eslint-config-next": "^13.5.5",
-    "eslint-plugin-tailwindcss": "^3.13.0",
-    "postcss": "^8.4.31",
-    "typescript": "5.2.2"
+    "@biomejs/biome": "^1.9.3",
+    "@types/node": "^22.7.4",
+    "@types/react": "^18.3.11",
+    "@types/react-dom": "^18.3.0",
+    "@types/react-lazy-load-image-component": "^1.6.4",
+    "autoprefixer": "^10.4.20",
+    "eslint-config-next": "^14.2.14",
+    "eslint-plugin-tailwindcss": "^3.17.4",
+    "postcss": "^8.4.47",
+    "typescript": "5.6.2"
   },
   "pnpm": {
     "overrides": {
@@ -64,5 +62,5 @@
       "string.prototype.codepointat": "npm:@nolyfill/string.prototype.codepointat@^1"
     }
   },
-  "packageManager": "pnpm@9.11.0+sha512.0a203ffaed5a3f63242cd064c8fb5892366c103e328079318f78062f24ea8c9d50bc6a47aa3567cabefd824d170e78fa2745ed1f16b132e16436146b7688f19b"
+  "packageManager": "pnpm@9.12.0"
 }
