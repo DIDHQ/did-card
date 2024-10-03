@@ -1,9 +1,9 @@
 import useBeep from '@/hooks/use-beep'
-import { flippedAtom } from '@/utils/atom'
+import { didAtom, flippedAtom, imageAtom } from '@/utils/atom'
 import { fetchJSON } from '@/utils/fetch'
 import { useWindowSize } from '@uidotdev/usehooks'
 import clsx from 'clsx'
-import { useAtomValue } from 'jotai'
+import { useAtom, useAtomValue, useSetAtom } from 'jotai'
 import { useRouter } from 'next/router'
 import { useCallback, useRef, useState } from 'react'
 import Confetti from 'react-confetti'
@@ -17,20 +17,19 @@ import ParallaxStars from './parallax-stars'
  * @see https://fjolt.com/article/css-3d-interactive-flippable-cards
  */
 export default function CardPreview(props: {
-  did: string
   front?: string
   back?: string
   png?: string
-  onDidChange(did: string): void
-  onImageChange(did: string): void
   className?: string
 }) {
-  const { front, back, png, onDidChange, onImageChange } = props
+  const { front, back, png } = props
 
   const router = useRouter()
   const nfc = router.query.nfc as string | undefined
   const beep = useBeep()
   const flipped = useAtomValue(flippedAtom)
+  const setImage = useSetAtom(imageAtom)
+  const [did, setDid] = useAtom(didAtom)
   const inputRef = useRef<HTMLInputElement>(null)
   const { trigger: download, isMutating: isDownloading } = useSWRMutation('download', async () => {
     if (!png) {
@@ -38,7 +37,7 @@ export default function CardPreview(props: {
     }
 
     const anchor = document.createElement('a')
-    anchor.setAttribute('download', flipped ? 'back.png' : `${props.did}.png`)
+    anchor.setAttribute('download', flipped ? 'back.png' : `${did}.png`)
     anchor.href = png
     anchor.setAttribute('target', '_blank')
     anchor.click()
@@ -48,14 +47,14 @@ export default function CardPreview(props: {
     'write',
     async () => {
       setSuccess(false)
-      if (!nfc || !props.did) {
+      if (!nfc || !did) {
         return
       }
 
       const json = await fetchJSON<{ code: number }>(nfc, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ url: `https://d.id/${props.did}` }),
+        body: JSON.stringify({ url: `https://d.id/${did}` }),
       })
       if (json.code !== 0) {
         throw new Error('write error')
@@ -81,14 +80,14 @@ export default function CardPreview(props: {
         return
       }
 
-      onDidChange(file.name.replace(/\.[^\.]+$/, ''))
+      setDid(file.name.replace(/\.[^\.]+$/, ''))
       const reader = new FileReader()
       reader.onloadend = () => {
-        onImageChange(reader.result as string)
+        setImage(reader.result as string)
       }
       reader.readAsDataURL(file)
     },
-    [onDidChange, onImageChange],
+    [setDid, setImage],
   )
   const { width, height } = useWindowSize()
 
@@ -156,7 +155,7 @@ export default function CardPreview(props: {
           {nfc ? (
             <button
               type='button'
-              disabled={!props.did || isWriting}
+              disabled={!did || isWriting}
               onClick={() => write()}
               className='mt-16 rounded-full bg-white p-3 font-semibold leading-4 shadow-2xl transition-colors hover:bg-gray-300 disabled:cursor-not-allowed'
             >

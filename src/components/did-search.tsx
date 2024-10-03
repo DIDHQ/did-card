@@ -1,22 +1,24 @@
 import useRelatedAddresses from '@/hooks/use-related-addresses'
+import { didAtom, imageAtom, roleAtom, tagAtom } from '@/utils/atom'
 import { fetchJSON } from '@/utils/fetch'
 import type { Collection } from '@/utils/type'
 import clsx from 'clsx'
+import { useSetAtom } from 'jotai'
 import { useState } from 'react'
 import useSWR from 'swr'
 import { LoadingIcon, SearchIcon } from './icon'
 import NftCollections from './nft-collections'
 
 export default function DIDSearch(props: {
-  setDid: (did: string) => void
-  setTag: (tag: string) => void
-  setRole: (role: string) => void
-  setImage: (image: string) => void
   className?: string
 }) {
   const [did, setDid] = useState('')
   const [tag, setTag] = useState('')
   const [role, setRole] = useState('')
+  const setImage = useSetAtom(imageAtom)
+  const setDidAtom = useSetAtom(didAtom)
+  const setTagAtom = useSetAtom(tagAtom)
+  const setRoleAtom = useSetAtom(roleAtom)
   const { data: addresses, isLoading: isAddressesLoading } = useRelatedAddresses(did)
   const { data: collections, isLoading: isCollectionsLoading } = useSWR(
     addresses?.length ? ['nft', addresses] : null,
@@ -36,7 +38,7 @@ export default function DIDSearch(props: {
           placeholder='DID or Name'
           value={did}
           onChange={(e) => setDid(e.target.value)}
-          onBlur={() => props.setDid(did)}
+          onBlur={() => setDidAtom(did)}
           className='flex-1 bg-transparent p-6 text-4xl font-bold leading-normal text-gray-800 outline-none placeholder:text-gray-400'
         />
       </div>
@@ -54,7 +56,7 @@ export default function DIDSearch(props: {
                   : e.target.value,
             )
           }
-          onBlur={() => props.setTag(tag)}
+          onBlur={() => setTagAtom(tag)}
           className='flex-1 bg-transparent p-6 text-4xl font-bold leading-normal text-gray-800 outline-none placeholder:text-gray-400'
         />
       </div>
@@ -64,14 +66,14 @@ export default function DIDSearch(props: {
           placeholder='Role'
           value={role}
           onChange={(e) => setRole(e.target.value)}
-          onBlur={() => props.setRole(role)}
+          onBlur={() => setRoleAtom(role)}
           className='flex-1 bg-transparent p-6 text-4xl font-bold leading-normal text-gray-800 outline-none placeholder:text-gray-400'
         />
       </div>
       <NftCollections
         collections={collections}
         onSelect={(image) => {
-          props.setImage(image)
+          setImage(image)
         }}
         className='h-0 flex-1'
       />

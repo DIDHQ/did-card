@@ -1,15 +1,24 @@
 import DIDSearch from '@/components/did-search'
-import { flippedAtom } from '@/utils/atom'
+import {
+  didAtom,
+  didColorAtom,
+  flippedAtom,
+  imageAtom,
+  roleAtom,
+  roleColorAtom,
+  tagAtom,
+  tagColorAtom,
+} from '@/utils/atom'
 import type { generateBack } from '@/workers/back'
 import type { generateFront } from '@/workers/front'
 import type { convertToPng } from '@/workers/png'
 import { Allotment } from 'allotment'
 import { wrap } from 'comlink'
-import { useAtomValue } from 'jotai'
+import { useAtom, useAtomValue } from 'jotai'
 import dynamic from 'next/dynamic'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
 import useSWR from 'swr'
 
 const CardPreview = dynamic(() => import('@/components/card-preview'), {
@@ -18,15 +27,21 @@ const CardPreview = dynamic(() => import('@/components/card-preview'), {
 })
 
 export default function IndexPage() {
-  const [did, setDid] = useState('')
-  const [tag, setTag] = useState('')
-  const [role, setRole] = useState('')
-  const [image, setImage] = useState('')
+  const flipped = useAtomValue(flippedAtom)
+  const [image, setImage] = useAtom(imageAtom)
+  const did = useAtomValue(didAtom)
+  const [tag, setTag] = useAtom(tagAtom)
+  const [role, setRole] = useAtom(roleAtom)
+  const didColor = useAtomValue(didColorAtom)
+  const tagColor = useAtomValue(tagColorAtom)
+  const roleColor = useAtomValue(roleColorAtom)
   useEffect(() => {
     if (!did) {
       setImage('')
+      setTag('')
+      setRole('')
     }
-  }, [did])
+  }, [did, setImage, setTag, setRole])
 
   const frontRef = useRef<typeof generateFront>()
   const backRef = useRef<typeof generateBack>()
@@ -47,12 +62,21 @@ export default function IndexPage() {
   const offset = typeof router.query.offset === 'string' ? Number.parseInt(router.query.offset) : 0
 
   const { data: front } = useSWR(
-    ['front', did, tag, role, image],
+    ['front', image, did, tag, role, didColor, tagColor, roleColor],
     () => {
       if (!frontRef.current) {
         throw new Error()
       }
-      return frontRef.current.call(frontRef.current, image, did, tag, role)
+      return frontRef.current.call(
+        frontRef.current,
+        image,
+        did,
+        tag,
+        role,
+        didColor,
+        tagColor,
+        roleColor,
+      )
     },
     { revalidateOnFocus: false, errorRetryInterval: 1000 },
   )
@@ -66,7 +90,6 @@ export default function IndexPage() {
     },
     { revalidateOnFocus: false, errorRetryInterval: 1000 },
   )
-  const flipped = useAtomValue(flippedAtom)
   const svg = flipped ? back : front
   const { data: png } = useSWR(
     svg ? ['png', svg] : null,
@@ -87,22 +110,8 @@ export default function IndexPage() {
         <link rel='icon' href={image || '/favicon.png'} />
       </Head>
       <Allotment minSize={320} className='h-screen w-screen print:hidden'>
-        <DIDSearch
-          setDid={setDid}
-          setTag={setTag}
-          setRole={setRole}
-          setImage={setImage}
-          className='size-full'
-        />
-        <CardPreview
-          did={did}
-          front={front}
-          back={back}
-          png={png}
-          onDidChange={setDid}
-          onImageChange={setImage}
-          className='size-full'
-        />
+        <DIDSearch className='size-full' />
+        <CardPreview front={front} back={back} png={png} className='size-full' />
       </Allotment>
       <div className='hidden h-screen w-screen overflow-hidden print:block'>
         <img

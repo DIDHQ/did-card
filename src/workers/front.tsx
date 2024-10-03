@@ -14,7 +14,15 @@ export const logo = svgToDataURI(
 
 let initialized = false
 
-export async function generateFront(image: string, did: string, tag: string, role: string) {
+export async function generateFront(
+  image: string,
+  did: string,
+  tag: string,
+  role: string,
+  didColor: string,
+  tagColor: string,
+  roleColor: string,
+) {
   if (!initialized) {
     const wasm = await fetch(new URL('yoga-wasm-web/dist/yoga.wasm', import.meta.url)).then((res) =>
       res.arrayBuffer(),
