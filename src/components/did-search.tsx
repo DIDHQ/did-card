@@ -28,9 +28,9 @@ export default function DIDSearch(props: {
     <div className={clsx('flex h-full flex-col', props.className)}>
       <div className='flex shrink-0 items-center px-6'>
         {isAddressesLoading || isCollectionsLoading ? (
-          <LoadingIcon className='h-8 w-8 shrink-0 text-gray-400' />
+          <LoadingIcon className='size-8 shrink-0 text-gray-400' />
         ) : (
-          <SearchIcon className='h-8 w-8 shrink-0 text-gray-400' />
+          <SearchIcon className='size-8 shrink-0 text-gray-400' />
         )}
         <input
           placeholder='DID or Name'

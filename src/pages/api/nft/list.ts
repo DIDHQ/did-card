@@ -34,7 +34,7 @@ async function simpleHash(addresses: string[], apiKey?: string): Promise<Collect
   }>(
     `https://api.simplehash.com/api/v0/nfts/collections_by_wallets?chains=${supportedChains.join(
       ',',
-    )}&wallet_addresses=${addresses.filter(isAddress).join(',')}&nft_ids=1`,
+    )}&wallet_addresses=${addresses.filter((address) => isAddress(address)).join(',')}&nft_ids=1`,
     {
       headers: apiKey
         ? { 'x-api-key': apiKey }

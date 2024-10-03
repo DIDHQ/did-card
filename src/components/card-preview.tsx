@@ -106,15 +106,10 @@ export default function CardPreview(props: {
       }}
       className={clsx('relative print:hidden', props.className)}
     >
-      <ParallaxStars
-        stars={100}
-        speed={0.3}
-        color='#ffffff'
-        className='h-full w-full bg-gradient'
-      />
+      <ParallaxStars stars={100} speed={0.3} color='#ffffff' className='size-full bg-gradient' />
       <div
         className={clsx(
-          'absolute inset-0 flex h-full w-full flex-col items-center justify-center',
+          'absolute inset-0 flex size-full flex-col items-center justify-center',
           props.className,
         )}
       >
@@ -133,7 +128,7 @@ export default function CardPreview(props: {
                 onChange={(e) => handleFile(e.target.files?.[0])}
                 className='hidden'
               />
-              <UploadIcon className='h-7 w-7 text-gray-800' />
+              <UploadIcon className='size-7 text-gray-800' />
             </button>
           ) : null}
           {router.query.download ? (
@@ -144,9 +139,9 @@ export default function CardPreview(props: {
               className='mt-16 rounded-full bg-white p-3 font-semibold leading-4 shadow-2xl transition-colors hover:bg-gray-300 disabled:cursor-not-allowed'
             >
               {isDownloading ? (
-                <LoadingIcon className='h-7 w-7 text-gray-400' />
+                <LoadingIcon className='size-7 text-gray-400' />
               ) : (
-                <DownloadIcon className='h-7 w-7 text-gray-800' />
+                <DownloadIcon className='size-7 text-gray-800' />
               )}
             </button>
           ) : null}
@@ -156,7 +151,7 @@ export default function CardPreview(props: {
             onClick={() => window.print()}
             className='mt-16 rounded-full bg-white p-3 font-semibold leading-4 shadow-2xl transition-colors hover:bg-gray-300 disabled:cursor-not-allowed'
           >
-            <PrintIcon className='h-7 w-7 text-gray-800' />
+            <PrintIcon className='size-7 text-gray-800' />
           </button>
           {nfc ? (
             <button
@@ -166,9 +161,9 @@ export default function CardPreview(props: {
               className='mt-16 rounded-full bg-white p-3 font-semibold leading-4 shadow-2xl transition-colors hover:bg-gray-300 disabled:cursor-not-allowed'
             >
               {isWriting ? (
-                <LoadingIcon className='h-7 w-7 text-gray-400' />
+                <LoadingIcon className='size-7 text-gray-400' />
               ) : (
-                <NfcIcon className='h-7 w-7 text-gray-800' />
+                <NfcIcon className='size-7 text-gray-800' />
               )}
             </button>
           ) : null}

@@ -39,9 +39,9 @@ export default trackWindowScroll(function NftToken(props: {
       onError={handleError}
       onClick={handleClick}
       wrapperClassName='block h-32 w-32'
-      className='h-32 w-32 cursor-pointer rounded-xl bg-gray-50 object-cover ring-gray-200 transition-shadow hover:ring'
+      className='size-32 cursor-pointer rounded-xl bg-gray-50 object-cover ring-gray-200 transition-shadow hover:ring'
     />
   ) : (
-    <div className='h-32 w-32 cursor-not-allowed rounded-xl bg-gray-50' />
+    <div className='size-32 cursor-not-allowed rounded-xl bg-gray-50' />
   )
 })

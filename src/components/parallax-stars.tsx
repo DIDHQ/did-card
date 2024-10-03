@@ -20,6 +20,7 @@ export default function ParallaxStars(props: {
     [props.down, props.speed, props.stars, height, width],
   )
   const tick = useCallback(() => {
+    // @ts-ignore
     const ctx = ref.current?.getContext('2d')
     if (!ctx || !width || !height) {
       return
@@ -44,6 +45,7 @@ export default function ParallaxStars(props: {
     }
   }, [tick])
   useEffect(() => {
+    // @ts-ignore
     const ctx = ref.current?.getContext('2d')
     if (ctx && !props.sparkle) {
       ctx.globalAlpha = 1

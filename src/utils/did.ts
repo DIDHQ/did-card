@@ -1,4 +1,4 @@
-import { compact, uniq } from 'remeda'
+import { filter, unique } from 'remeda'
 import { http, createPublicClient, labelhash, namehash, parseAbi } from 'viem'
 import { mainnet } from 'viem/chains'
 import { normalize } from 'viem/ens'
@@ -139,16 +139,18 @@ export async function getRelatedAddresses(did: string): Promise<string[]> {
       getEnsOwner(did),
       getEnsAddress(did),
     ])
-    return uniq(compact([manager, owner, address])).filter((address) => address !== ensNameWrapper)
+    return unique(filter([manager, owner, address], Boolean) as string[]).filter(
+      (address) => address !== ensNameWrapper,
+    )
   }
   if (didSystem === DidSystem.LENS) {
     const address = await getEnsAddress(`${did}.xyz`)
-    return compact([address])
+    return filter([address], Boolean) as string[]
   }
   if (didSystem === DidSystem.BIT) {
     const { manager, owner } = await getBitAccountInfo(did)
     const reverses = await getBitAccountReverseAddresses(did)
-    return uniq(compact([manager, owner, ...reverses]))
+    return unique(filter([manager, owner, ...reverses], Boolean) as string[])
   }
   return []
 }

@@ -14,7 +14,7 @@ import useSWR from 'swr'
 
 const CardPreview = dynamic(() => import('@/components/card-preview'), {
   ssr: false,
-  loading: () => <div className='h-full w-full bg-gradient' />,
+  loading: () => <div className='size-full bg-gradient' />,
 })
 
 export default function IndexPage() {
@@ -92,7 +92,7 @@ export default function IndexPage() {
           setTag={setTag}
           setRole={setRole}
           setImage={setImage}
-          className='h-full w-full'
+          className='size-full'
         />
         <CardPreview
           did={did}
@@ -101,10 +101,10 @@ export default function IndexPage() {
           png={png}
           onDidChange={setDid}
           onImageChange={setImage}
-          className='h-full w-full'
+          className='size-full'
         />
       </Allotment>
-      <div className='hidden h-[100vh] w-[100vw] overflow-hidden print:block'>
+      <div className='hidden h-screen w-screen overflow-hidden print:block'>
         <img
           src={png}
           alt='print'

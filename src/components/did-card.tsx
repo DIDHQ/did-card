@@ -132,10 +132,10 @@ export default function DidCard(props: {
           transform: 'rotateX(0) rotateY(0deg) scale(1) translateZ(-4px)',
           background: 'black',
         }}
-        className='absolute inset-0 h-full w-full overflow-hidden rounded-[12.5pt] transition-all duration-150 ease-out'
+        className='absolute inset-0 size-full overflow-hidden rounded-[12.5pt] transition-all duration-150 ease-out'
       >
-        <div style={{ transform: 'rotateY(180deg)' }} className='h-full w-full'>
-          <img src={backImage} alt='back' className='h-full w-full' />
+        <div style={{ transform: 'rotateY(180deg)' }} className='size-full'>
+          <img src={backImage} alt='back' className='size-full' />
         </div>
       </div>
 
@@ -149,7 +149,7 @@ export default function DidCard(props: {
           backgroundImage: frontImage,
           backgroundPosition: '50% 50%',
         }}
-        className='h-full w-full overflow-hidden rounded-[12.5pt] bg-black bg-cover object-cover transition-all duration-150 ease-out'
+        className='size-full overflow-hidden rounded-[12.5pt] bg-black bg-cover object-cover transition-all duration-150 ease-out'
       >
         {frontImage ? (
           <div
@@ -158,11 +158,11 @@ export default function DidCard(props: {
               opacity: animated ? 0.3 : 0,
               background: 'radial-gradient(circle at 50% 50%, rgb(199 198 243), transparent)',
             }}
-            className='pointer-events-none absolute inset-0 z-50 h-full w-full rounded-[12.5pt] mix-blend-hard-light transition-all duration-100 ease-out'
+            className='pointer-events-none absolute inset-0 z-50 size-full rounded-[12.5pt] mix-blend-hard-light transition-all duration-100 ease-out'
           />
         ) : (
           <div className='flex h-[212.5pt] w-full items-center justify-center bg-gray-400'>
-            <LoadingIcon className='h-24 w-24 text-white' />
+            <LoadingIcon className='size-24 text-white' />
           </div>
         )}
       </div>
