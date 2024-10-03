@@ -45,7 +45,7 @@ export async function generateFront(
         fontSize: 256,
         lineHeight: 1.5,
         fontWeight: 600,
-        color: 'white',
+        color: didColor,
       }}
     >
       {did || '???'}
@@ -132,7 +132,7 @@ export async function generateFront(
             fontSize: 128,
             lineHeight: 1.5,
             fontWeight: 600,
-            color: '#7ff845',
+            color: tagColor,
           }}
         >
           {`#${tag}`}
@@ -144,8 +144,7 @@ export async function generateFront(
               fontSize: 128,
               lineHeight: 1.2,
               fontWeight: 600,
-              opacity: 0.6,
-              color: 'white',
+              color: roleColor,
             }}
           >
             {role}

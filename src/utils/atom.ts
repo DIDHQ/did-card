@@ -10,8 +10,8 @@ export const tagAtom = atom('')
 
 export const roleAtom = atom('')
 
-export const didColorAtom = atom('')
+export const didColorAtom = atom('#ffffff')
 
-export const tagColorAtom = atom('')
+export const tagColorAtom = atom('#7ff845')
 
-export const roleColorAtom = atom('')
+export const roleColorAtom = atom('#999999')
