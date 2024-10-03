@@ -20,7 +20,7 @@ const CardPreview = dynamic(() => import('@/components/card-preview'), {
 export default function IndexPage() {
   const [did, setDid] = useState('')
   const [tag, setTag] = useState('')
-  const [title, setTitle] = useState('')
+  const [role, setRole] = useState('')
   const [image, setImage] = useState('')
   useEffect(() => {
     if (!did) {
@@ -47,12 +47,12 @@ export default function IndexPage() {
   const offset = typeof router.query.offset === 'string' ? Number.parseInt(router.query.offset) : 0
 
   const { data: front } = useSWR(
-    ['front', did, tag, title, image],
+    ['front', did, tag, role, image],
     () => {
       if (!frontRef.current) {
         throw new Error()
       }
-      return frontRef.current.call(frontRef.current, did, tag, title, image)
+      return frontRef.current.call(frontRef.current, did, tag, role, image)
     },
     { revalidateOnFocus: false, errorRetryInterval: 1000 },
   )
@@ -90,7 +90,7 @@ export default function IndexPage() {
         <DIDSearch
           setDid={setDid}
           setTag={setTag}
-          setTitle={setTitle}
+          setRole={setRole}
           setImage={setImage}
           className='h-full w-full'
         />

@@ -14,7 +14,7 @@ export const logo = svgToDataURI(
 
 let initialized = false
 
-export async function generateFront(did?: string, tag?: string, title?: string, image?: string) {
+export async function generateFront(did?: string, tag?: string, role?: string, image?: string) {
   if (!initialized) {
     const wasm = await fetch(new URL('yoga-wasm-web/dist/yoga.wasm', import.meta.url)).then((res) =>
       res.arrayBuffer(),
@@ -105,7 +105,7 @@ export async function generateFront(did?: string, tag?: string, title?: string, 
           height: 0,
           flex: 1,
           backgroundColor: 'black',
-          paddingTop: title ? 100 : 220,
+          paddingTop: role ? 100 : 220,
           paddingBottom: 144,
           paddingRight: 28,
           display: 'flex',
@@ -129,7 +129,7 @@ export async function generateFront(did?: string, tag?: string, title?: string, 
         >
           {`#${tag}`}
         </div>
-        {title ? (
+        {role ? (
           <div
             style={{
               flexShrink: 0,
@@ -140,7 +140,7 @@ export async function generateFront(did?: string, tag?: string, title?: string, 
               color: 'white',
             }}
           >
-            {title}
+            {role}
           </div>
         ) : null}
         <div style={{ flex: 1, height: 0 }} />

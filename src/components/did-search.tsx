@@ -10,13 +10,13 @@ import NftCollections from './nft-collections'
 export default function DIDSearch(props: {
   setDid: (did: string) => void
   setTag: (tag: string) => void
-  setTitle: (title: string) => void
+  setRole: (role: string) => void
   setImage: (image: string) => void
   className?: string
 }) {
   const [did, setDid] = useState('')
   const [tag, setTag] = useState('')
-  const [title, setTitle] = useState('')
+  const [role, setRole] = useState('')
   const { data: addresses, isLoading: isAddressesLoading } = useRelatedAddresses(did)
   const { data: collections, isLoading: isCollectionsLoading } = useSWR(
     addresses?.length ? ['nft', addresses] : null,
@@ -59,12 +59,12 @@ export default function DIDSearch(props: {
         />
       </div>
       <div className='flex shrink-0 items-center bg-slate-200 px-6'>
-        <div className='w-8 shrink-0 text-5xl leading-none text-gray-400'>T</div>
+        <div className='w-8 shrink-0 text-5xl leading-none text-gray-400'>R</div>
         <input
-          placeholder='Title'
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          onBlur={() => props.setTitle(title)}
+          placeholder='Role'
+          value={role}
+          onChange={(e) => setRole(e.target.value)}
+          onBlur={() => props.setRole(role)}
           className='flex-1 bg-transparent p-6 text-4xl font-bold leading-normal text-gray-800 outline-none placeholder:text-gray-400'
         />
       </div>
