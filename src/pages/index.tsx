@@ -52,7 +52,7 @@ export default function IndexPage() {
       if (!frontRef.current) {
         throw new Error()
       }
-      return frontRef.current.call(frontRef.current, did, tag, role, image)
+      return frontRef.current.call(frontRef.current, image, did, tag, role)
     },
     { revalidateOnFocus: false, errorRetryInterval: 1000 },
   )
